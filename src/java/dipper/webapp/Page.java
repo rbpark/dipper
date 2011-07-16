@@ -34,6 +34,7 @@ public class Page {
                 HttpServletResponse response,
                 VelocityEngine engine,
                 String template) {
+    	response.setContentType("application/xhtml+xml");
         this.request = request;
         this.response = response;
         this.engine = engine;

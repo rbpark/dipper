@@ -11,8 +11,11 @@ h1 {
 	color: #FFF;
 }
 
+#container{
+}
+
 #banner {
-	background-color: #2E4A8E;
+	background-color: #222;
 	border-bottom: 1px solid #333;
 	height: 50px;
 }
@@ -24,7 +27,96 @@ h1 {
 }
 
 #footer {
-	clear: both;
-	background-color: #2E4A8E;
-	padding: 1em;
+   position:absolute;
+   bottom:0;
+   width:100%;
+   height:20px;   /* Height of the footer */
+   background:#222;
+}
+
+#content
+{
+}
+
+#content h2
+{
+	color: #000;
+	font-size: 160%;
+	margin: 0 0 .5em;
+}
+
+.sliderMenu .menuHeader {
+	background-image: url('../images/slideMenu.png');
+	width: 100%;
+	height: 20px;
+}
+
+.sliderMenu .menuContent {
+	background-image: url('../images/slideMenuCenter.png');
+	background-repeat: repeat-y;
+	background-position: center; 
+	min-height: 10px;
+}
+
+.sliderMenu .expandable .menuContent{
+	min-height: 100px;
+}
+
+.sliderMenu .menuFooter {
+	background-image: url('../images/slideMenu.png');
+	width: 100%;
+	height: 20px;
+}
+
+.sliderMenu.left .menuHeader {
+	background-position: right top; 
+}
+
+.sliderMenu.left .menuContent {
+	background-position: right center; 
+}
+
+.sliderMenu.left .menuFooter {
+	background-position: right bottom; 
+}
+
+.sliderMenu.right .button {
+	background-position: left top; 
+}
+
+.sliderMenu.right .menuContent {
+	background-position: left center; 
+}
+
+.sliderMenu.right .menuFooter {
+	background-position: left bottom; 
+}
+
+.sliderMenu .button {
+	width: 40px;
+	position: inherit;
+	left: inherit;
+	right: inherit;
+	top: -20px;
+}
+
+.sliderMenu .button {
+	width: 40px;
+	position: absolute;
+}
+
+.sliderMenu.left {
+	width: 300px;
+	left: 0px;
+}
+
+.sliderMenu.right {
+	width: 300px;
+	right: 0px;
+}
+
+.sliderMenu {
+	top: 65px;
+	min-height: 200px;
+	position:absolute;
 }

@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-    <link rel="stylesheet" href="static/css/jquery-ui.css" type="text/css" media="all" />
     <link rel="stylesheet" href="static/css/dipper.css" type="text/css" media="all" />
     
     <script src="static/js/jquery-1.6.1.js" type="text/javascript"></script> 
@@ -11,9 +10,42 @@
         <body>
         <div id="container">
         	<div id="banner">
-        		<h1>Dipper</h1>
+        		<h1>dipper</h1>
         	</div>
         	<div id="content">
+
+			</div>
+			<div id="leftmenu" class="sliderMenu left">
+   				<div id="leftArrow" class="button">
+    				<div class="menuHeader" />
+					<div class="menuContent">
+						<div class="expand" />
+					</div>
+					<div class="menuFooter" />
+    			</div>
+				<div id="expandableLeft" class="expandable" >
+					<div class="menuHeader" />
+					<div class="menuContent">
+					</div>
+					<div class="menuFooter" />
+	    		</div>
+    		</div>
+    		<div id="rightmenu" class="sliderMenu right">
+    			<div id="rightArrow" class="button">
+    				<div class="menuHeader" />
+					<div class="menuContent">
+						<div class="expand" />
+					</div>
+					<div class="menuFooter" />
+    			</div>
+	    		<div id="expandableRight" class="expandable">
+	    			<div class="menuHeader" />
+					<div class="menuContent" />
+					<div class="menuFooter" />
+	    		</div>
+    		</div>
+
+    		<div id="footer">
 			</div>
         </div>
     </body>
