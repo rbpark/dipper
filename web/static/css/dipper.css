@@ -5,6 +5,7 @@ body {
 	font-size: 10px;
 	color: #000;
 	background-color: #ddd;
+	overflow:hidden;
 }
 
 h1 {
@@ -12,12 +13,14 @@ h1 {
 }
 
 #container{
+	overflow:hidden;
 }
 
 #banner {
-	background-color: #222;
-	border-bottom: 1px solid #333;
-	height: 50px;
+	background-image: url('../images/headerFooter.png');
+	background-repeat: repeat-x;
+	background-position: bottom;
+	height: 60px;
 }
 
 #banner h1 {
@@ -27,11 +30,12 @@ h1 {
 }
 
 #footer {
+   background-image: url('../images/headerFooter.png');
+   background-repeat: repeat-x;
    position:absolute;
    bottom:0;
    width:100%;
-   height:20px;   /* Height of the footer */
-   background:#222;
+   height:35px;   /* Height of the footer */
 }
 
 #content
@@ -59,7 +63,7 @@ h1 {
 }
 
 .sliderMenu .expandable .menuContent{
-	min-height: 100px;
+	min-height: 350px;
 }
 
 .sliderMenu .menuFooter {
@@ -107,7 +111,6 @@ h1 {
 
 .sliderMenu.left {
 	width: 300px;
-	left: 0px;
 }
 
 .sliderMenu.right {
@@ -116,7 +119,51 @@ h1 {
 }
 
 .sliderMenu {
-	top: 65px;
-	min-height: 200px;
+	top: 45px;
 	position:absolute;
 }
+
+#leftArrow {
+	top: 60px;
+	left: 2px;
+	width: 11px;
+	height: 30px;
+	background-image: url('../images/arrows.png');
+	background-position: 18px -1px; 
+	position: absolute;
+}
+
+#leftArrow:hover {
+	background-position: -5px -1px; 
+}
+
+#leftArrow.expanded {
+	background-position: 18px 31px;
+}
+
+#leftArrow.expanded:hover {
+	background-position: -5px 31px; 
+}
+
+#rightArrow {
+	top: 60px;
+	right: 2px;
+	width: 11px;
+	height: 30px;
+	background-image: url('../images/arrows.png');
+	background-position: 18px 31px; 
+	position: absolute;
+}
+
+#rightArrow:hover {
+	background-position: -5px 31px; 
+}
+
+#rightArrow.expanded {
+	background-position: 18px -1px;
+}
+
+#rightArrow.expanded:hover {
+	background-position: -5px -1px; 
+}
+
