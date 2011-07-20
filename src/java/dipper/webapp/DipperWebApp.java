@@ -28,8 +28,7 @@ public class DipperWebApp {
 	public static void main(String[] args) {
 		Properties props = null;
 		if (args.length == 0) {
-			System.err
-					.println("The only argument must be the config property file.");
+			System.err.println("The only argument must be the config property file.");
 			props = new Properties();
 		} else {
 			props = PropertyUtils.loadProperties(new File(args[0]));

@@ -1,5 +1,4 @@
 var leftExpanded = false;
-
 function toggleLeftMenu() {
 	var width = $('#leftmenu').width();
 	if (leftExpanded) {
@@ -13,6 +12,7 @@ function toggleLeftMenu() {
 		$('#leftArrow').addClass('expanded');
 	}
 	leftExpanded = !leftExpanded;
+	$.cookie('dipper_leftMenuExpanded', leftExpanded);
 }
 
 var rightExpanded = false;
@@ -29,15 +29,17 @@ function toggleRightMenu() {
 		$('#rightArrow').addClass('expanded');
 	}
 	rightExpanded = !rightExpanded;
+	$.cookie('dipper_rightMenuExpanded', rightExpanded);
 }
 
 function initMenus() {
+
 	var leftWidth = $('#leftmenu').width();
 	var rightLeft = $('#rightmenu').width();
 	
 	$('#leftmenu').css({'left': '-' + leftWidth + "px"});
 	$('#rightmenu').css({'right': '-' + rightLeft + "px"});
-	
+
 	$('#leftArrow').click(function() {
 		toggleLeftMenu();
 	});	
@@ -45,6 +47,17 @@ function initMenus() {
 	$('#rightArrow').click(function() {
 		toggleRightMenu();
 	});	
+	
+	var leftCookie = $.cookie('dipper_leftMenuExpanded');
+	var rightCookie = $.cookie('dipper_rightMenuExpanded');
+	
+	if (leftCookie == "true") {
+		toggleLeftMenu();
+	}
+	
+	if (rightCookie == "true") {
+		toggleRightMenu();
+	}
 }
 
 $(function() {
