@@ -8,12 +8,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dipper.webapp.DipperWebApp;
 
 public abstract class AbstractServlet extends HttpServlet {
 	private static final long serialVersionUID = 2254914605389316822L;
-
+	// one hour timeout
+	private static final int SESSION_TIMEOUT = 30;
+	
 	private DipperWebApp app;
 
 	@Override
@@ -71,5 +74,21 @@ public abstract class AbstractServlet extends HttpServlet {
 	protected Page newPage(HttpServletRequest req, HttpServletResponse resp, String template) {
 		Page page = new Page(req, resp, app.getVelocityEngine(), template);
 		return page;
+	}
+	
+	protected boolean checkSession(HttpServletRequest request) {
+		//request.getSession(true);
+		HttpSession session = request.getSession(true);
+		request.getCookies();
+		session.setMaxInactiveInterval(SESSION_TIMEOUT);
+		Integer projectId = (Integer)session.getAttribute("projectId");
+		if (projectId == null) {
+			session.setAttribute("projectId", (int)(Math.random()*10000));
+		}
+		
+		System.out.println("Session id: " + session.getId() + " pid:" + session.getAttribute("projectId"));
+		
+		
+		return false;
 	}
 }

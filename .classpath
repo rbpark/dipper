@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/joda-time-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-util-6.1.26.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.16-bin.jar"/>
 	<classpathentry kind="output" path="dist/classes"/>
 </classpath>
