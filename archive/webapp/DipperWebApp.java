@@ -7,11 +7,7 @@ import org.apache.log4j.Logger;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.log.Log4JLogChute;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
-import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
-import org.mortbay.jetty.nio.SelectChannelConnector;
-import org.mortbay.jetty.security.Constraint;
-import org.mortbay.jetty.security.ConstraintMapping;
 import org.mortbay.jetty.security.SslSocketConnector;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.DefaultServlet;
@@ -20,6 +16,9 @@ import org.mortbay.jetty.servlet.ServletHolder;
 import dipper.app.DipperApp;
 import dipper.utils.PropertyUtils;
 import dipper.webapp.session.DipperSessionManager;
+
+
+
 
 public class DipperWebApp {
 	public static final String APP_SERVLET_CONTEXT_KEY = "dipper-web-app";

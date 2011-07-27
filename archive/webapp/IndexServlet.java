@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dipper.webapp.common.AbstractServlet;
+import dipper.webapp.common.Page;
+
 
 public class IndexServlet extends AbstractServlet {
 	private static final long serialVersionUID = -4688702005332106156L;
@@ -18,7 +21,7 @@ public class IndexServlet extends AbstractServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		checkSession(request);
 
-		//response.addCookie(cookie);
+	//	response.addCookie(cookie);
 		Page page = newPage(request, response, "dipper/webapp/desktop.vm");
 		page.render();
 	}

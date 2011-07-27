@@ -1,4 +1,4 @@
-package dipper.webapp;
+package dipper.webapp.common;
 
 import java.util.ArrayList;
 import java.util.List;

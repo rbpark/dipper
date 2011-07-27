@@ -1,4 +1,4 @@
-package dipper.webapp;
+package dipper.webapp.common;
 
 /**
  * Thrown if there is an error rendering the page
