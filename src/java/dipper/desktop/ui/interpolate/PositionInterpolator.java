@@ -61,24 +61,57 @@ public class PositionInterpolator implements ValueInterpolator{
 	 * The only caller of this should be the interpolator
 	 */
 	public boolean interpolate() {
-		int x = component.getX();
-		int y = component.getY();
-		if (x == endX && y == endY) {
+		int x1 = component.getX();
+		int y1 = component.getY();
+		if (x1 == endX && y1 == endY) {
 			return false;
 		}
 		
 		long deltaTime = System.currentTimeMillis() - startTimeMS;
+		int x2 = -1;
+		int y2 = -1;
 		
 		float steps = ((float)(deltaTime * stepValuePerSec)/ 1000f);
-		if (x != endX) {
-			x = resolveValue(startX, endX, (int)(dx*steps));
+		if (x1 != endX) {
+			x2 = resolveValue(startX, endX, (int)(dx*steps));
 		}
-		if (y != endY) {
-			y = resolveValue(startY, endY, (int)(dy*steps));
+		if (y1 != endY) {
+			y2 = resolveValue(startY, endY, (int)(dy*steps));
 		}
-		component.setLocation(x, y);
+		
+		component.setLocation(x2, y2);
+		//callRedraw(x1, y1, x2, y2);
+
 		return true;
 	}
+	
+//	private void callRedraw(int oldX, int oldY, int newX, int newY) {
+//		int dirtyX = -1;
+//		int dirtyWidth = -1;
+//		int width = component.getWidth();
+//		if (oldX < newX) {
+//			dirtyX = oldX;
+//			dirtyWidth = newX + width - dirtyX;
+//		}
+//		else {
+//			dirtyX = newX;
+//			dirtyWidth = oldX + width - dirtyX;
+//		}
+//		
+//		int dirtyY = -1;
+//		int dirtyHeight = -1;
+//		int height = component.getHeight();
+//		if (oldY < newY) {
+//			dirtyY = oldY;
+//			dirtyHeight = newY + height - dirtyY;
+//		}
+//		else {
+//			dirtyY = newY;
+//			dirtyHeight = oldY + height - dirtyY;
+//		}
+//		
+//		component.repaint(dirtyX, dirtyY, dirtyWidth, dirtyHeight);
+//	}
 	
 	/**
 	 * 

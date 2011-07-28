@@ -6,6 +6,7 @@ import java.util.Properties;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import dipper.desktop.ui.DipperMainPanel;
 import dipper.desktop.ui.interpolate.PositionInterpolator;
 import dipper.utils.PropertyUtils;
 
@@ -20,13 +21,10 @@ public class DipperFrame extends JFrame {
 		setupPanels();
 		
 		this.setVisible(true);
-		
 	}
 	
 	private void setupPanels() {
-		JPanel mainPain = new JPanel();
-		mainPain.setDoubleBuffered(true);
-		mainPain.setLayout(null);
+		DipperMainPanel mainPain = new DipperMainPanel();
 		this.setContentPane(mainPain);
 		
 		JPanel panel = new JPanel();
@@ -37,7 +35,7 @@ public class DipperFrame extends JFrame {
 		mainPain.add(panel);
 		
 		PositionInterpolator interp = new PositionInterpolator(panel);
-		interp.setStepsPerSecond(100);
+		interp.setStepsPerSecond(1200);
 		interp.setPosition(900, 400, true);
 	}
 	
