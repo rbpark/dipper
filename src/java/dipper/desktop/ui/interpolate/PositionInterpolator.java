@@ -125,20 +125,18 @@ public class PositionInterpolator implements ValueInterpolator{
 			return end;
 		}
 		
+		int val = start + steps;
 		if (start < end ){
 			// need to increment the steps.
-			int val = start + steps;
 			if (val > end) {
 				return end;
 			}
-			return val;
 		}
 		else {
-			int val = start - steps;
 			if (val < end) {
 				return end;
 			}
-			return val;
 		}
+		return val;
 	}
 }
