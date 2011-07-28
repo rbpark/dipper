@@ -68,8 +68,8 @@ public class PositionInterpolator implements ValueInterpolator{
 		}
 		
 		long deltaTime = System.currentTimeMillis() - startTimeMS;
-		int x2 = -1;
-		int y2 = -1;
+		int x2 = x1;
+		int y2 = y1;
 		
 		float steps = ((float)(deltaTime * stepValuePerSec)/ 1000f);
 		if (x1 != endX) {

@@ -45,10 +45,7 @@ public class DipperMainPanel extends JPanel {
 		int width = this.getWidth();
 		int height = this.getHeight();
 		
-		g2d.setColor(Color.black);
-		g2d.fillRect(0, 0, width, height);
-		
-		g2d.drawImage(resizedImage, 0, 0, width, height, null);
+		g2d.drawImage(resizedImage, 0, 0, width, height, Color.WHITE, null);
 	}
 	
 }

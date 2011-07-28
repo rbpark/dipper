@@ -31,13 +31,13 @@ public class DipperFrame extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setSize(200, 500);
 		panel.setLocation(50, 100);
-		panel.setBackground(Color.black);
+		panel.setBackground(new Color(0xCC000000, true));
 		panel.setDoubleBuffered(true);
 		mainPain.add(panel);
 		
 		PositionInterpolator interp = new PositionInterpolator(panel);
-		interp.setStepsPerSecond(1200);
-		interp.setPosition(900, 400, true);
+		interp.setStepsPerSecond(1500);
+		interp.setPosition(900, 100, true);
 	}
 	
 	private void extractProperties(Properties props) {
