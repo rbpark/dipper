@@ -16,6 +16,7 @@ public class DipperFrame extends JFrame {
 	private static final String HEIGHT_PROPERTY = "height";
 	
 	public DipperFrame(Properties props) {
+		this.setTitle("Dipper Desktop");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		extractProperties(props);
 		setupPanels();
