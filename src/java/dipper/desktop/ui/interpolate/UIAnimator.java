@@ -9,8 +9,6 @@ import dipper.desktop.ui.interpolate.ValueInterpolator;
 
 public class UIAnimator {
 	private static final int idleWaitTime = 10000;
-	// Should give us about 60fps
-	private static final long waitBetweenFrames = 15;
 	private static UIAnimator instance = new UIAnimator();
 	private Set<ValueInterpolator> interpolators;
 	private List<ValueInterpolator> interpolatorQueue;
@@ -57,14 +55,6 @@ public class UIAnimator {
 							interpolators.remove(interpolator);
 						}
 					}
-//					
-//					// Try to keep animation at 60 fps.
-//					synchronized (this) {
-//						try {
-//							this.wait(waitBetweenFrames);
-//						} catch (InterruptedException e) {
-//						}
-//					}
 				}
 				else {
 					synchronized (this) {

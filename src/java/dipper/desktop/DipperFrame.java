@@ -30,15 +30,15 @@ public class DipperFrame extends JFrame {
 		this.setContentPane(mainPain);
 		
 		JPanel panel = new JPanel();
-		panel.setSize(100, 100);
-		panel.setLocation(100, 100);
+		panel.setSize(200, 500);
+		panel.setLocation(50, 100);
 		panel.setBackground(Color.black);
 		panel.setDoubleBuffered(true);
 		mainPain.add(panel);
 		
 		PositionInterpolator interp = new PositionInterpolator(panel);
-		interp.setStepsPerSecond(750);
-		interp.setPosition(700, 500, true);
+		interp.setStepsPerSecond(100);
+		interp.setPosition(900, 400, true);
 	}
 	
 	private void extractProperties(Properties props) {

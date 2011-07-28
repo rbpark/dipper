@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -17,7 +16,7 @@ import joptsimple.OptionSpec;
 
 public class DipperDesktopApp {
 	private static final String CONFIG_FILE_DIR = "./conf";
-	private static final String CONFIG_FILE = "dipper.conf";
+	private static final String CONFIG_FILE = "dipper-desktop.conf";
 	private static Logger logger = Logger.getLogger(DipperDesktopApp.class);
 	private static File propertiesFile;
 
