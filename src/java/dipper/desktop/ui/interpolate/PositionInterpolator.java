@@ -6,6 +6,7 @@ public class PositionInterpolator implements ValueInterpolator{
 	private Component component;
 	private int startX;
 	private int startY;
+	
 	private int endX;
 	private int endY;
 	private float dx;
@@ -13,7 +14,7 @@ public class PositionInterpolator implements ValueInterpolator{
 	private long startTimeMS = -1;
 	
 	private int stepValuePerSec = 1000;
-		
+	
 	public PositionInterpolator(Component component) {
 		this.component = component;
 		this.endX = component.getX();
@@ -63,7 +64,7 @@ public class PositionInterpolator implements ValueInterpolator{
 	public boolean interpolate() {
 		int x1 = component.getX();
 		int y1 = component.getY();
-		if (x1 == endX && y1 == endY) {
+		if ((x1 == endX && y1 == endY)) {
 			return false;
 		}
 		
@@ -80,38 +81,10 @@ public class PositionInterpolator implements ValueInterpolator{
 		}
 		
 		component.setLocation(x2, y2);
-		//callRedraw(x1, y1, x2, y2);
 
 		return true;
 	}
 	
-//	private void callRedraw(int oldX, int oldY, int newX, int newY) {
-//		int dirtyX = -1;
-//		int dirtyWidth = -1;
-//		int width = component.getWidth();
-//		if (oldX < newX) {
-//			dirtyX = oldX;
-//			dirtyWidth = newX + width - dirtyX;
-//		}
-//		else {
-//			dirtyX = newX;
-//			dirtyWidth = oldX + width - dirtyX;
-//		}
-//		
-//		int dirtyY = -1;
-//		int dirtyHeight = -1;
-//		int height = component.getHeight();
-//		if (oldY < newY) {
-//			dirtyY = oldY;
-//			dirtyHeight = newY + height - dirtyY;
-//		}
-//		else {
-//			dirtyY = newY;
-//			dirtyHeight = oldY + height - dirtyY;
-//		}
-//		
-//		component.repaint(dirtyX, dirtyY, dirtyWidth, dirtyHeight);
-//	}
 	
 	/**
 	 * 

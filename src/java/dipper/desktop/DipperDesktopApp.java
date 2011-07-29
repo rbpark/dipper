@@ -36,21 +36,21 @@ public class DipperDesktopApp {
 			System.exit(-1);
 		}
 
+		Properties props = new Properties();
 		propertiesFile = new File(confDir, CONFIG_FILE);
 		if (!propertiesFile.exists()) {
 			logger.error("Conf file " + propertiesFile.getAbsolutePath()
 					+ " doesn't exist.");
-			System.exit(-1);
 		}
-
-		Properties props = new Properties();
-		try {
-			props.load(new BufferedInputStream(new FileInputStream(
-					propertiesFile)));
-		} catch (IOException e) {
-			logger.error("Error reading properties file "
-					+ propertiesFile.getAbsolutePath() + ". " + e.getMessage());
-			System.exit(-1);
+		else {
+			try {
+				props.load(new BufferedInputStream(new FileInputStream(
+						propertiesFile)));
+			} catch (IOException e) {
+				logger.error("Error reading properties file "
+						+ propertiesFile.getAbsolutePath() + ". " + e.getMessage());
+				System.exit(-1);
+			}
 		}
 
 		final DipperDesktopApp desktop = new DipperDesktopApp(props);

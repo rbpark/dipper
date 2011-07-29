@@ -1,13 +1,10 @@
 package dipper.desktop;
-
-import java.awt.Color;
+	
 import java.util.Properties;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import dipper.desktop.ui.DipperMainPanel;
-import dipper.desktop.ui.interpolate.PositionInterpolator;
 import dipper.utils.PropertyUtils;
 
 @SuppressWarnings("serial")
@@ -25,19 +22,8 @@ public class DipperFrame extends JFrame {
 	}
 	
 	private void setupPanels() {
-		DipperMainPanel mainPain = new DipperMainPanel();
-		this.setContentPane(mainPain);
-		
-		JPanel panel = new JPanel();
-		panel.setSize(250, 500);
-		panel.setLocation(900, 100);
-		panel.setBackground(new Color(0xCC000000, true));
-		panel.setDoubleBuffered(true);
-		mainPain.add(panel);
-		
-		PositionInterpolator interp = new PositionInterpolator(panel);
-		interp.setStepsPerSecond(1500);
-		interp.setPosition(50, 100, true);
+		DipperMainPanel mainPanel = new DipperMainPanel();
+		this.setContentPane(mainPanel);
 	}
 	
 	private void extractProperties(Properties props) {

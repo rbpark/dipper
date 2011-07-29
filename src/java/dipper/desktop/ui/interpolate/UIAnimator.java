@@ -12,6 +12,7 @@ public class UIAnimator {
 	private static UIAnimator instance = new UIAnimator();
 	private Set<ValueInterpolator> interpolators;
 	private List<ValueInterpolator> interpolatorQueue;
+	private List<ValueInterpolator> removeInterpolatorQueue;
 	
 	private AnimationLoop looper; 
 	
