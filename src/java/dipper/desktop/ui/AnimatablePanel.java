@@ -1,7 +1,5 @@
 package dipper.desktop.ui;
 
-import java.awt.Color;
-
 import javax.swing.JPanel;
 
 import dipper.desktop.ui.interpolate.PositionInterpolator;

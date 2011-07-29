@@ -42,6 +42,10 @@ public class BorderSprites {
 		
 		mainImage = ImageIO.read(backgroundStream);
 	
+		if (mainImage == null) {
+			throw new IOException("Image " + resource + " not found.");
+		}
+		
 		int imageWidth = mainImage.getWidth(null);
 		int imageHeight = mainImage.getHeight(null);
 
