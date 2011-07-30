@@ -5,9 +5,11 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.IOException;
 
 public class SliderPanel extends AnimatablePanel {
 	private static final long serialVersionUID = 1L;
+	private static final String SPRITE_BORDER_IMG_PATH = "images/slideMenu.png";
 	
 	public static final int BIND_LEFT = 0;
 	public static final int BIND_RIGHT = 1;
@@ -31,8 +33,17 @@ public class SliderPanel extends AnimatablePanel {
 	private float gestureExpandThreshold = 0.3f;
 	private float gestureCollapseThreshold = 0.7f;
 	
+	private static BorderSprites defaultSprite;
+	static {
+		try {
+			defaultSprite = new BorderSprites();
+			defaultSprite.createSpritesFromResource(SPRITE_BORDER_IMG_PATH, 32, 32, 32, 32);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	// Border sprites
-	private BorderSprites sprites = null;
+	private BorderSprites sprites = defaultSprite;
 	
 	public SliderPanel(int bindSide) {
 		super();

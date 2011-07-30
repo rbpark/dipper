@@ -16,20 +16,16 @@ public class DipperMainPanel extends JPanel {
 	private static final long serialVersionUID = 7143502855240909560L;
 	private static final String BACKGROUND_IMG_PATH = "images/background.png";
 	private static final String DIPPER_IMG_PATH = "images/dipper.png";
-	private static final String SPRITE_BORDER_IMG_PATH = "images/slideMenu.png";
-	private static final String DOCUMENT_BORDER_IMG_PATH = "images/documentBackground.png";
 	private Image backgroundImage;
 	private Image dipperImage;
 	private BufferedImage resizedImageBackground;
-	private BorderSprites sliderSprites;
-	private BorderSprites documentSprites;
 	
 	private static final int RIGHT_MENU_WIDTH = 300;
-	private static final int BOTTOM_MENU_HEIGHT = 300;
 	
 	private SliderPanel rightPanel;
-	private SliderPanel bottomPanel;
+	private BottomPanel bottomPanel;
 	private DocumentPanel documentPanel;
+	private DipperMenu dipperMenu;
 	
 	public DipperMainPanel() {
 		this.setLayout(null);
@@ -47,34 +43,31 @@ public class DipperMainPanel extends JPanel {
 			Graphics2D g = resizedImageBackground.createGraphics();
 			g.drawImage(backgroundImage, 0, 0, 256, 256, null);
 			g.dispose();
-
-			sliderSprites = new BorderSprites();
-			sliderSprites.createSpritesFromResource(SPRITE_BORDER_IMG_PATH, 32, 32, 32, 32);
-			
-			documentSprites = new BorderSprites();
-			documentSprites.createSpritesFromResource(DOCUMENT_BORDER_IMG_PATH, 32, 32, 32, 32);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
+		dipperMenu = new DipperMenu();
+		dipperMenu.addMenuItem(new DipperMenu.MenuItem("new"));
+		dipperMenu.addMenuItem(new DipperMenu.MenuItem("open"));
+		dipperMenu.addMenuItem(new DipperMenu.MenuItem("action"));
+		dipperMenu.addMenuItem(new DipperMenu.MenuItem("preferences"));	
+		dipperMenu.addMenuItem(new DipperMenu.MenuItem("save as"));
+		dipperMenu.addMenuItem(new DipperMenu.MenuItem("save"));
+		this.add(dipperMenu);
 		
 		rightPanel = new SliderPanel(SliderPanel.BIND_RIGHT);
 		rightPanel.setDimension(RIGHT_MENU_WIDTH);
 		rightPanel.setMargins(10, 0, 40, 310);
-		rightPanel.setBorderSprites(sliderSprites);
 		this.add(rightPanel);
 		
-		bottomPanel = new SliderPanel(SliderPanel.BIND_BOTTOM);
-		bottomPanel.setDimension(BOTTOM_MENU_HEIGHT);
-		bottomPanel.setMargins(0, 0, 0, 0);
-		bottomPanel.setBorderSprites(sliderSprites);
+		bottomPanel = new BottomPanel();
 		this.add(bottomPanel);
 		
-		documentPanel = new DocumentPanel();
-		documentPanel.setLocation(100, 100);
-		documentPanel.setSize(800, 600);
-		documentPanel.setBorderSprites(documentSprites);
-		this.add(documentPanel);
+//		documentPanel = new DocumentPanel();
+//		documentPanel.setLocation(100, 100);
+//		documentPanel.setSize(800, 600);
+//		this.add(documentPanel);
 	}
 	
 	public void doLayout() {
@@ -92,7 +85,7 @@ public class DipperMainPanel extends JPanel {
 		int height = this.getHeight();
 		
 		g2d.drawImage(resizedImageBackground, 0, -4, width, height+4, Color.WHITE, null);
-		g2d.drawImage(dipperImage, 10, 10, null);
+		//g2d.drawImage(dipperImage, 10, 10, null);
 	}
 	
 }

@@ -3,12 +3,27 @@ package dipper.desktop.ui;
 import java.awt.Graphics;
 import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.DragGestureListener;
+import java.io.IOException;
 
 import javax.swing.JPanel;
 
 public class DocumentPanel extends JPanel {
-	private BorderSprites sprites = null;
+
+	private static final long serialVersionUID = -9156651220918451578L;
+	private static final String DOCUMENT_BORDER_IMG_PATH = "images/documentBackground.png";
+	private static BorderSprites defaultSprites = null;
+	private BorderSprites sprites = defaultSprites;
+	static {
+		defaultSprites = new BorderSprites();
+		try {
+			defaultSprites.createSpritesFromResource(DOCUMENT_BORDER_IMG_PATH, 32, 32, 32, 32);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public DocumentPanel() {
+		this.setOpaque(false);
 	}
 	
 	public void setBorderSprites(BorderSprites sprites) {
