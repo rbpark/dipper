@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import dipper.desktop.ui.interpolate.OpacityInterpolator;
 
 public class DipperMenu extends JPanel implements OpacityComponent {
+	private static final long serialVersionUID = 252808975643487376L;
 	private static final String DIPPER_IMG_PATH = "images/dipper.png";
 	private ArrayList<MenuItem> menuItems = new ArrayList<MenuItem>();
 	private float radius = 200;
@@ -55,13 +56,14 @@ public class DipperMenu extends JPanel implements OpacityComponent {
 	
 	private OpacityInterpolator interpolator;
 	private MenuMouseMotionListener menuListener;
+	private DipperLogo logo;
 	
 	public DipperMenu() {
 		this.setOpaque(false);
 		this.setLayout(null);
-		this.setSize(210,200);
+		this.setSize(210,180);
 		
-		DipperLogo logo = new DipperLogo();
+		logo = new DipperLogo();
 		logo.setLocation(10, 10);
 		this.add(logo);
 		
@@ -75,6 +77,10 @@ public class DipperMenu extends JPanel implements OpacityComponent {
 	}
 	
 	public void setMenuVisibility(boolean menuVisiblity) {
+		if (menuVisiblity == menuVisible) {
+			return;
+		}
+
 		menuVisible = menuVisiblity;
 		if (menuVisiblity) {
 			this.addMouseListener(menuListener);
@@ -186,17 +192,18 @@ public class DipperMenu extends JPanel implements OpacityComponent {
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			toggleMenuVisiblity();
+			//toggleMenuVisiblity();
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent arg0) {
-			this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			//this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			setMenuVisibility(true);
 		}
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
-			this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			//this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
 
 		@Override
@@ -286,8 +293,6 @@ public class DipperMenu extends JPanel implements OpacityComponent {
 		}
 	}
 	
-
-	
 	private class MenuMouseMotionListener implements MouseMotionListener, MouseListener {
 		private Point dest = new Point();
 		private MenuItem hovered = null;
@@ -343,9 +348,11 @@ public class DipperMenu extends JPanel implements OpacityComponent {
 		}
 
 		@Override
-		public void mouseExited(MouseEvent arg0) {
+		public void mouseExited(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+			if (!contains(e.getPoint())) {
+				setMenuVisibility(false);
+			}
 		}
 
 		@Override

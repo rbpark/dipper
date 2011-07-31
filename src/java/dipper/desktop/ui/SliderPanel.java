@@ -20,7 +20,7 @@ public class SliderPanel extends AnimatablePanel {
 	private int bindSide = BIND_LEFT;
 	
 	private int dimension = 0;
-	private int collapseMargin = 20;
+	private int collapseMargin = 25;
 	private int gestureOverpull = 15;
 	private int marginLeft = 0;
 	private int marginRight = 0;

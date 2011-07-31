@@ -15,9 +15,7 @@ import javax.swing.JPanel;
 public class DipperMainPanel extends JPanel {
 	private static final long serialVersionUID = 7143502855240909560L;
 	private static final String BACKGROUND_IMG_PATH = "images/background.png";
-	private static final String DIPPER_IMG_PATH = "images/dipper.png";
 	private Image backgroundImage;
-	private Image dipperImage;
 	private BufferedImage resizedImageBackground;
 	
 	private static final int RIGHT_MENU_WIDTH = 300;
@@ -35,10 +33,6 @@ public class DipperMainPanel extends JPanel {
 					DipperMainPanel.class.getClassLoader().getResourceAsStream(BACKGROUND_IMG_PATH));
 			backgroundImage = ImageIO.read(backgroundStream);
 			
-			InputStream dipperStream = new BufferedInputStream(
-					DipperMainPanel.class.getClassLoader().getResourceAsStream(DIPPER_IMG_PATH));
-			dipperImage = ImageIO.read(dipperStream);
-			
 			resizedImageBackground = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = resizedImageBackground.createGraphics();
 			g.drawImage(backgroundImage, 0, 0, 256, 256, null);
@@ -55,6 +49,7 @@ public class DipperMainPanel extends JPanel {
 		dipperMenu.addMenuItem(new DipperMenu.MenuItem("save as"));
 		dipperMenu.addMenuItem(new DipperMenu.MenuItem("save"));
 		this.add(dipperMenu);
+		dipperMenu.setMenuVisibility(false);
 		
 		rightPanel = new SliderPanel(SliderPanel.BIND_RIGHT);
 		rightPanel.setDimension(RIGHT_MENU_WIDTH);

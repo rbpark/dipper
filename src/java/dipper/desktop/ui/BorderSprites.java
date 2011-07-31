@@ -1,6 +1,6 @@
 package dipper.desktop.ui;
+
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.IOException;
