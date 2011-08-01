@@ -3,7 +3,6 @@ package dipper.desktop.ui;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
-import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -24,6 +23,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import dipper.desktop.ui.interpolate.OpacityComponent;
 import dipper.desktop.ui.interpolate.OpacityInterpolator;
 
 public class DipperMenu extends JPanel implements OpacityComponent {

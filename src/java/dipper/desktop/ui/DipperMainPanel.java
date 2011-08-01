@@ -22,7 +22,7 @@ public class DipperMainPanel extends JPanel {
 	
 	private SliderPanel rightPanel;
 	private BottomPanel bottomPanel;
-	private DocumentPanel documentPanel;
+	private ProjectCanvas documentPanel;
 	private DipperMenu dipperMenu;
 	
 	public DipperMainPanel() {
@@ -59,16 +59,19 @@ public class DipperMainPanel extends JPanel {
 		bottomPanel = new BottomPanel();
 		this.add(bottomPanel);
 		
-//		documentPanel = new DocumentPanel();
-//		documentPanel.setLocation(100, 100);
-//		documentPanel.setSize(800, 600);
-//		this.add(documentPanel);
+		documentPanel = new ProjectCanvas();
+		documentPanel.setLocation(50, 50);
+		documentPanel.setSize(800, 600);
+		this.add(documentPanel);
 	}
 	
 	public void doLayout() {
 		super.doLayout();
 		rightPanel.reposition();
 		bottomPanel.reposition();
+		if (documentPanel != null) {
+			documentPanel.reposition();
+		}
 	}
 	
 	@Override
@@ -82,5 +85,5 @@ public class DipperMainPanel extends JPanel {
 		g2d.drawImage(resizedImageBackground, 0, -4, width, height+4, Color.WHITE, null);
 		//g2d.drawImage(dipperImage, 10, 10, null);
 	}
-	
+
 }

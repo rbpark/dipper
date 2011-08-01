@@ -1,4 +1,4 @@
-package dipper.desktop.ui;
+package dipper.desktop.ui.interpolate;
 
 public interface OpacityComponent {
 	public void setOpacity(float f);

@@ -12,12 +12,14 @@ public class UIAnimator {
 	private static UIAnimator instance = new UIAnimator();
 	private Set<ValueInterpolator> interpolators;
 	private List<ValueInterpolator> interpolatorQueue;
-	
+	private List<ValueInterpolator> removeQueue;
+	private long millisecBetweenTicks = 15;
 	private AnimationLoop looper; 
 	
 	private UIAnimator() {
 		interpolators = new HashSet<ValueInterpolator>();
 		interpolatorQueue = new ArrayList<ValueInterpolator>();
+		removeQueue = new ArrayList<ValueInterpolator>();
 		looper = new AnimationLoop();
 		looper.start();
 	}
@@ -36,8 +38,10 @@ public class UIAnimator {
 	private class AnimationLoop extends Thread {
 		boolean isRunning = true;
 		
+		long currentTime;
 		public void run() {
 			while (isRunning) {
+				currentTime = System.currentTimeMillis();
 				// We only need to synchronize on the queue, since adding to the set
 				// should be protected.
 				synchronized (interpolatorQueue) {
@@ -52,7 +56,22 @@ public class UIAnimator {
 				if (!interpolators.isEmpty()) {
 					for (ValueInterpolator interpolator: interpolators) {
 						if(!interpolator.interpolate()) {
-							interpolators.remove(interpolator);
+							removeQueue.add(interpolator);
+						}
+					}
+					
+					if (!removeQueue.isEmpty()) {
+						interpolators.removeAll(removeQueue);
+						removeQueue.clear();
+					}
+					
+					long timeDiff = System.currentTimeMillis() - currentTime;
+					if (timeDiff < millisecBetweenTicks) {
+						synchronized (this) {
+							try {
+								this.wait(millisecBetweenTicks - timeDiff);
+							} catch (InterruptedException e) {
+							}
 						}
 					}
 				}

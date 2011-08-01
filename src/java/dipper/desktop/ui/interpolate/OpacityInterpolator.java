@@ -1,7 +1,5 @@
 package dipper.desktop.ui.interpolate;
 
-import dipper.desktop.ui.OpacityComponent;
-
 public class OpacityInterpolator implements ValueInterpolator{
 	private float step = 0.01f;
 	private float target;

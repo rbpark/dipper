@@ -1,5 +1,6 @@
 package dipper.desktop;
 	
+import java.awt.Dimension;
 import java.util.Properties;
 
 import javax.swing.JFrame;
@@ -24,6 +25,7 @@ public class DipperFrame extends JFrame {
 	private void setupPanels() {
 		DipperMainPanel mainPanel = new DipperMainPanel();
 		this.setContentPane(mainPanel);
+		this.setMinimumSize(new Dimension(450, 450));
 	}
 	
 	private void extractProperties(Properties props) {

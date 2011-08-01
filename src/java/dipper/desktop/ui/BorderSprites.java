@@ -1,6 +1,7 @@
 package dipper.desktop.ui;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -26,6 +27,19 @@ public class BorderSprites {
 	public BorderSprites() {
 	}
 
+	public void createSpritesFromResource(String resource, int left, int right, int top, int bottom, int resizeW, int resizeH) throws IOException {		
+		InputStream backgroundStream = new BufferedInputStream(
+				DipperMainPanel.class.getClassLoader().getResourceAsStream(resource));
+		
+		BufferedImage mainImage = ImageIO.read(backgroundStream);
+		BufferedImage scaledImage = (BufferedImage)mainImage.getScaledInstance(resizeW, resizeH, Image.SCALE_AREA_AVERAGING);
+		if (mainImage == null) {
+			throw new IOException("Image " + resource + " not found.");
+		}
+		createSpritesFromImage(scaledImage, left, right, top, bottom);	
+	}
+
+	
 	/**
 	 * Cuts up the image from the resource
 	 * 
@@ -40,12 +54,16 @@ public class BorderSprites {
 		InputStream backgroundStream = new BufferedInputStream(
 				DipperMainPanel.class.getClassLoader().getResourceAsStream(resource));
 		
-		mainImage = ImageIO.read(backgroundStream);
+		BufferedImage mainImage = ImageIO.read(backgroundStream);
 	
 		if (mainImage == null) {
 			throw new IOException("Image " + resource + " not found.");
 		}
-		
+		createSpritesFromImage(mainImage, left, right, top, bottom);	
+	}
+	
+	public void createSpritesFromImage(BufferedImage image, int left, int right, int top, int bottom) {
+		mainImage = image;
 		int imageWidth = mainImage.getWidth(null);
 		int imageHeight = mainImage.getHeight(null);
 
