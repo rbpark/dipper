@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.DragGestureListener;
@@ -46,7 +47,12 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	private double ty;
 	private double scale;
 	
-	private Color gridColor = new Color(0f,0f,0f,0.5f);
+	private double x1;
+	private double x2;
+	private double y1;
+	private double y2;
+	
+	private Color gridColor = new Color(0.0f,0.0f,0.0f,0.2f);
 	private Color blank = new Color(1f,1f,1f,0.0f);
 	
 	private BufferedImage image;
@@ -54,6 +60,12 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	private AffineTransform transform;
 	private static BorderSprites maskSprites;
 	private DragVelocityInterpolator interp;
+	
+	private BufferedImage[] borders = new BufferedImage[4];
+	private double gridDistance = 100;
+	private boolean drawGrid = true;
+	private Rectangle bounds = new Rectangle();
+	private Rectangle clip = null;
 	
 	static {
 		try {
@@ -97,57 +109,111 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		transform.setToIdentity();
 		transform.scale(scale, scale);
 		transform.translate(tx, ty);
+		
+		x1 = -tx;
+		y1 = -ty;
+		x2 = getWidth() + x1;
+		y2 = getHeight() + y2;
+		
+		clip = new Rectangle(64, 64, this.getWidth() - 128, this.getHeight() - 128);
 	}
 	
 	@Override
 	public void doLayout() {
-		//image = createVolatileImage(this.getWidth(), this.getHeight() );
+		recalcTransform();
 		image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		//images[1] = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
-	
+		
 		redraw();
 	}
 	
 	@Override
 	public synchronized void paintComponent(Graphics g) {
-		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
+		Graphics2D imageG2d = (Graphics2D)image.getGraphics();
+		internalRedraw(imageG2d, false);
 		g2d.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), null);
-		//internalRedraw(g2d);
+//	
+//		int width = this.getWidth();
+//		int height = this.getHeight();
+//
+//		bounds = g2d.getClipBounds(bounds);
+//		//bounds.intersection(r);
+//		g2d.setClip(bounds.intersection(clip));
+//		internalRedraw(g2d, true);
+//		g2d.setClip(bounds);
+//			
+//		
+//		// Upperside
+//		g2d.drawImage(image, 0, 0, width, 64, 0, 0, width, 64, null);
+//		// Leftside
+//		g2d.drawImage(image, 0, 64, 64, height - 64,0, 64, 64, height - 64, null);
+//		// Leftside
+//		g2d.drawImage(image, width - 64, 64, width, height - 64,width - 64, 64, width, height - 64, null);
+//		// bottom side
+//		g2d.drawImage(image, 0, height - 64, width, height, 0, height - 64, width, height, null);
+//		
 	}
 	
 	private void redraw()  {
-		Graphics2D g2d = (Graphics2D)image.getGraphics();
-		internalRedraw(g2d);
-		//repaint(15);
+//		Graphics2D g2d = (Graphics2D)image.getGraphics();
+//		internalRedraw(g2d, false);
+		
+		//Draw only the borders
+//		g2d.setClip(0, 0, this.getWidth() - 128, 64);
+//		internalRedraw(g2d, false);
+//		
+		repaint(15);
 	}
 	
-	private synchronized void internalRedraw(Graphics2D g2d) {
+	private synchronized void internalRedraw(Graphics2D g2d, boolean framebuffer) {
 		Composite oldComp = g2d.getComposite();
 		int width = getWidth();
 		int height = getHeight();
-		g2d.setComposite(AlphaComposite.Src);
-		g2d.setColor(blank);
-		g2d.fillRect(0, 0, width, height);
+		if (!framebuffer){
+			g2d.setComposite(AlphaComposite.Src);
+			g2d.setColor(blank);
+			g2d.fillRect(0, 0, width, height);
+		}
 
 		AffineTransform old = g2d.getTransform();
-		g2d.setTransform(transform);
-		g2d.setColor(new Color(0f,0f,0f,1.0f));
-		
-		g2d.drawLine(0, 10, width, 10);
-		g2d.fillRect(110, 110, 10, 10);
+		g2d.transform(transform);
 
+		if (drawGrid) {
+			g2d.setColor(gridColor);
+			
+			// Horizontal Lines
+			double startX = Math.floor(y1/gridDistance)*gridDistance;
+			double endX = Math.ceil(y2/gridDistance)*gridDistance;
+			while (startX <= endX) {
+				g2d.drawLine((int)x1, (int)startX, (int)x2, (int)startX);
+				//g2d.fillRect((int)x1, (int)startX, (int)(x2-x1), 2);
+				startX += gridDistance;
+			}
+			
+			// Vertical Lines
+			double startY = Math.floor(x1/gridDistance)*gridDistance;
+			double endY = Math.ceil(x2/gridDistance)*gridDistance;
+			while (startY <= endY) {
+				//g2d.fillRect((int)startY, (int)y1, 2, (int)(y2-y1));
+				g2d.drawLine((int)startY, (int)y1, (int)startY, (int)y2);
+				startY += gridDistance;
+			}
+		}
+		
 		g2d.setTransform(old);
 		
-		g2d.setComposite(AlphaComposite.SrcIn);
-		maskSprites.drawBorderPanel(g2d, width, height);
-		g2d.setComposite(oldComp);
+		if (!framebuffer){
+			g2d.setComposite(AlphaComposite.SrcIn);
+			maskSprites.drawBorderPanel(g2d, width, height);
+			g2d.setComposite(oldComp);
+		}
+
 	}
 
 	public void reposition() {
 		Component parent = getParent();
 		if (parent != null) {
-			this.setSize(getParent().getWidth() - leftMargin - rightMargin, getParent().getWidth() - topMargin - bottomMargin);
+			this.setSize(getParent().getWidth() - leftMargin - rightMargin, getParent().getHeight() - topMargin - bottomMargin);
 		}
 	}
 	
@@ -182,12 +248,17 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			if (System.currentTimeMillis() - currentTime > 100) {
+			long time = (System.currentTimeMillis() - currentTime);
+			if (time > 100) {
 				return;
 			}
-			double vx = dx / (System.currentTimeMillis() - currentTime);
-			double vy = dy / (System.currentTimeMillis() - currentTime);
 			
+			//dx = e.getX() - px;
+			//dy = e.getY() - py;
+			//	System.out.println("D:" + dx+ "," + dy + " time:" + time);
+			double vx = dx / (time + 1);
+			double vy = dy / (time + 1);
+
 			interp.setVelocity(vx, vy);
 		}
 
@@ -228,7 +299,6 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		}
 		this.tx = tx;
 		this.ty = ty;
-		System.out.println(tx +"," + ty);
 
 		recalcTransform();
 		redraw();

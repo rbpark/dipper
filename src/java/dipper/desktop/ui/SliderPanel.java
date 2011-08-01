@@ -61,10 +61,10 @@ public class SliderPanel extends AnimatablePanel {
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
 		if (sprites != null) {
 			sprites.drawBorderPanel(g, this.getWidth(), this.getHeight());
 		}
+		super.paintComponent(g);
 	}
 	
 	public void setMargins(int left, int right, int top, int bottom) {

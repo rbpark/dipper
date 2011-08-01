@@ -4,8 +4,8 @@ public class DragVelocityInterpolator implements ValueInterpolator {
 	private long currentTimeMS = -1;
 	private double maxVelocity = 100;
 
-	private double velocityThreshold = 0.1;
-	private double decelerationPerMS = 1.0/20.0;
+	private double velocityThreshold = 0.01;
+	private double decelerationPerMS = 1.0/15.0;
 	
 	private double vx;
 	private double vy;
