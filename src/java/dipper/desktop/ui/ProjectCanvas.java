@@ -4,32 +4,20 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Composite;
-import java.awt.CompositeContext;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.dnd.DragGestureEvent;
-import java.awt.dnd.DragGestureListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
+import java.awt.geom.CubicCurve2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.Raster;
-import java.awt.image.VolatileImage;
-import java.awt.image.WritableRaster;
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import dipper.app.DipperProject;
 import dipper.desktop.ui.interpolate.DragVelocityInterpolator;
 import dipper.desktop.ui.interpolate.TranslateComponent;
 
@@ -37,6 +25,7 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 
 	private static final long serialVersionUID = -9156651220918451578L;
 	private static final String BACKGROUND_IMG_PATH = "images/mask.png";
+	private static final String DOCUMENT_IMG_PATH = "images/documentBackground.png";
 	
 	private int topMargin = 50;
 	private int bottomMargin = 50;
@@ -52,37 +41,34 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	private double y1;
 	private double y2;
 	
-	private Color gridColor = new Color(0.0f,0.0f,0.0f,0.2f);
+	private Color gridColor = new Color(.5f,.5f,.5f,0.3f);
 	private Color blank = new Color(1f,1f,1f,0.0f);
 	
 	private BufferedImage image;
-	private static Image gridMask;
 	private AffineTransform transform;
 	private static BorderSprites maskSprites;
 	private DragVelocityInterpolator interp;
 	
-	private BufferedImage[] borders = new BufferedImage[4];
-	private double gridDistance = 100;
+	private double gridDistance = 32;
 	private boolean drawGrid = true;
-	private Rectangle bounds = new Rectangle();
-	private Rectangle clip = null;
+	
+	private DipperProject project = null;
+	
+	private static BorderSprites buttonSprites;
 	
 	static {
 		try {
-			InputStream backgroundStream = new BufferedInputStream(
-					DipperMainPanel.class.getClassLoader().getResourceAsStream(BACKGROUND_IMG_PATH));
-			Image gridUnsized = ImageIO.read(backgroundStream);
-			
-			int resizedWidth = 400;
-			int resizedHeight = 400;
-			
-			gridMask = gridUnsized.getScaledInstance(resizedWidth, resizedHeight, Image.SCALE_AREA_AVERAGING);
 			maskSprites = new BorderSprites();
 			maskSprites.createSpritesFromResource(BACKGROUND_IMG_PATH, 64, 64, 64, 64);
+			
+			buttonSprites = new BorderSprites();
+			buttonSprites.createSpritesFromResource(DOCUMENT_IMG_PATH, 32, 32, 32, 32);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	private UpdateSize sizeThread = new UpdateSize();
 	
 	public ProjectCanvas() {
 		this.setOpaque(false);
@@ -103,6 +89,8 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		this.scale = 1.0;
 		transform = new AffineTransform();
 		recalcTransform();
+		
+		sizeThread.start();
 	}
 	
 	private void recalcTransform() {
@@ -114,55 +102,24 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		y1 = -ty;
 		x2 = getWidth() + x1;
 		y2 = getHeight() + y2;
-		
-		clip = new Rectangle(64, 64, this.getWidth() - 128, this.getHeight() - 128);
 	}
 	
 	@Override
 	public void doLayout() {
 		recalcTransform();
-		image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		
-		redraw();
+		//image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		sizeThread.tick();
+		repaint(15);
 	}
 	
 	@Override
 	public synchronized void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
-		Graphics2D imageG2d = (Graphics2D)image.getGraphics();
-		internalRedraw(imageG2d, false);
-		g2d.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), null);
-//	
-//		int width = this.getWidth();
-//		int height = this.getHeight();
-//
-//		bounds = g2d.getClipBounds(bounds);
-//		//bounds.intersection(r);
-//		g2d.setClip(bounds.intersection(clip));
-//		internalRedraw(g2d, true);
-//		g2d.setClip(bounds);
-//			
-//		
-//		// Upperside
-//		g2d.drawImage(image, 0, 0, width, 64, 0, 0, width, 64, null);
-//		// Leftside
-//		g2d.drawImage(image, 0, 64, 64, height - 64,0, 64, 64, height - 64, null);
-//		// Leftside
-//		g2d.drawImage(image, width - 64, 64, width, height - 64,width - 64, 64, width, height - 64, null);
-//		// bottom side
-//		g2d.drawImage(image, 0, height - 64, width, height, 0, height - 64, width, height, null);
-//		
-	}
-	
-	private void redraw()  {
-//		Graphics2D g2d = (Graphics2D)image.getGraphics();
-//		internalRedraw(g2d, false);
-		
-		//Draw only the borders
-//		g2d.setClip(0, 0, this.getWidth() - 128, 64);
-//		internalRedraw(g2d, false);
-//		
-		repaint(15);
+		if (image != null) {
+			Graphics2D imageG2d = (Graphics2D)image.getGraphics();
+			internalRedraw(imageG2d, false);
+			g2d.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
+		}
 	}
 	
 	private synchronized void internalRedraw(Graphics2D g2d, boolean framebuffer) {
@@ -175,6 +132,7 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 			g2d.fillRect(0, 0, width, height);
 		}
 
+		g2d.setComposite(AlphaComposite.SrcOver);
 		AffineTransform old = g2d.getTransform();
 		g2d.transform(transform);
 
@@ -200,10 +158,12 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 			}
 		}
 		
+		buttonSprites.drawBorderPanel(g2d, 128, 128);
+		
 		g2d.setTransform(old);
 		
 		if (!framebuffer){
-			g2d.setComposite(AlphaComposite.SrcIn);
+			g2d.setComposite(AlphaComposite.DstIn);
 			maskSprites.drawBorderPanel(g2d, width, height);
 			g2d.setComposite(oldComp);
 		}
@@ -279,7 +239,7 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		}
 		
 	}
-
+	
 	@Override
 	public double getTranslateX() {
 		// TODO Auto-generated method stub
@@ -301,7 +261,53 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		this.ty = ty;
 
 		recalcTransform();
-		redraw();
 		repaint(15);
+	}
+	
+	private class UpdateSize extends Thread {
+		private boolean isRunning = true;
+		private long time = 0;
+		public void tick() {
+			time = 100;
+			this.interrupt();
+		}
+		
+		public void run() {
+			while(isRunning) {
+				synchronized(this) {
+					while (time > 0) {
+						try {
+							this.wait(time);
+						} catch (InterruptedException e) {
+							continue;
+						}
+						
+						resizeIfNecessary();
+					}
+					
+					try {
+						wait();
+					}
+					catch (InterruptedException e) {	
+					}
+	
+				}
+			}
+		}
+	}
+	
+	private void resizeIfNecessary() {
+		if (image == null || image.getWidth() != this.getWidth() || image.getHeight() != this.getHeight()) {
+			image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);	
+			repaint(15);
+		}
+	}
+
+	public void setProject(DipperProject project) {
+		this.project = project;
+	}
+
+	public DipperProject getProject() {
+		return project;
 	}
 }

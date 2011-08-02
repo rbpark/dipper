@@ -3,7 +3,6 @@ package dipper.desktop.ui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -12,10 +11,17 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-public class DipperMainPanel extends JPanel {
+import dipper.app.DipperAppController;
+import dipper.app.DipperProject;
+import dipper.app.event.WorkspaceChangedEvent;
+import dipper.app.event.WorkspaceChangedListener;
+import dipper.desktop.ui.DipperMenu.MenuItem;
+import dipper.desktop.ui.event.DipperMenuListener;
+
+public class DipperMainPanel extends JPanel implements WorkspaceChangedListener, DipperMenuListener {
 	private static final long serialVersionUID = 7143502855240909560L;
 	private static final String BACKGROUND_IMG_PATH = "images/background.png";
-	private Image backgroundImage;
+	private BufferedImage backgroundImage;
 	private BufferedImage resizedImageBackground;
 	
 	private static final int RIGHT_MENU_WIDTH = 300;
@@ -25,18 +31,26 @@ public class DipperMainPanel extends JPanel {
 	private ProjectCanvas documentPanel;
 	private DipperMenu dipperMenu;
 	
-	public DipperMainPanel() {
+	private DipperAppController appController;
+	private DipperMenu.MenuItem saveAs;
+	private DipperMenu.MenuItem save;
+	
+	public DipperMainPanel(DipperAppController controller) {
 		this.setLayout(null);
 		this.setDoubleBuffered(true);
+		
+		appController = controller;
+		appController.addWorkspaceChangeListener(this);
+		
 		try {
 			InputStream backgroundStream = new BufferedInputStream(
 					DipperMainPanel.class.getClassLoader().getResourceAsStream(BACKGROUND_IMG_PATH));
 			backgroundImage = ImageIO.read(backgroundStream);
-			
-			resizedImageBackground = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g = resizedImageBackground.createGraphics();
-			g.drawImage(backgroundImage, 0, 0, 256, 256, null);
-			g.dispose();
+			resizedImageBackground = backgroundImage;
+//			resizedImageBackground = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+//			Graphics2D g = resizedImageBackground.createGraphics();
+//			g.drawImage(backgroundImage, 0, 0, 256, 256, null);
+//			g.dispose();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -46,23 +60,48 @@ public class DipperMainPanel extends JPanel {
 		dipperMenu.addMenuItem(new DipperMenu.MenuItem("open"));
 		dipperMenu.addMenuItem(new DipperMenu.MenuItem("action"));
 		dipperMenu.addMenuItem(new DipperMenu.MenuItem("preferences"));	
-		dipperMenu.addMenuItem(new DipperMenu.MenuItem("save as"));
-		dipperMenu.addMenuItem(new DipperMenu.MenuItem("save"));
+		saveAs = new DipperMenu.MenuItem("save as");
+		save = new DipperMenu.MenuItem("save");
+		dipperMenu.addMenuItem(saveAs);
+		dipperMenu.addMenuItem(save);
+		dipperMenu.addMenuListener(this);
+		
 		this.add(dipperMenu);
 		dipperMenu.setMenuVisibility(false);
 		
 		rightPanel = new SliderPanel(SliderPanel.BIND_RIGHT);
 		rightPanel.setDimension(RIGHT_MENU_WIDTH);
 		rightPanel.setMargins(10, 0, 40, 310);
+		rightPanel.setExpanded(false);
 		this.add(rightPanel);
 		
+
 		bottomPanel = new BottomPanel();
+		bottomPanel.setExpanded(false);
 		this.add(bottomPanel);
 		
 		documentPanel = new ProjectCanvas();
-		documentPanel.setLocation(50, 50);
-		documentPanel.setSize(800, 600);
 		this.add(documentPanel);
+		
+		resetPanels();
+	}
+	
+	public void resetPanels() {
+		DipperProject proj = appController.getActiveProject();
+		if (proj == null) {
+			bottomPanel.setVisible(false);
+			documentPanel.setVisible(false);
+			rightPanel.setVisible(false);
+			saveAs.setEnabled(false);
+			save.setEnabled(false);
+		}
+		else {
+			bottomPanel.setVisible(true);
+			documentPanel.setVisible(true);
+			rightPanel.setVisible(true);
+			saveAs.setEnabled(true);
+			save.setEnabled(true);
+		}
 	}
 	
 	public void doLayout() {
@@ -83,7 +122,18 @@ public class DipperMainPanel extends JPanel {
 		int height = this.getHeight();
 		
 		g2d.drawImage(resizedImageBackground, 0, -4, width, height+4, Color.WHITE, null);
-		//g2d.drawImage(dipperImage, 10, 10, null);
+	}
+
+	@Override
+	public void workspaceChanged(WorkspaceChangedEvent e) {
+		resetPanels();
+	}
+
+	@Override
+	public void menuItemSelected(MenuItem item) {
+		if (item.getName().equals("new")) {
+			appController.newProject("New Project");
+		}
 	}
 
 }

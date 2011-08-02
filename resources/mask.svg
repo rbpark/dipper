@@ -36,9 +36,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="555"
-     inkscape:cy="502.47818"
+     inkscape:zoom="7.9195959"
+     inkscape:cx="882.49569"
+     inkscape:cy="880.1817"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -46,8 +46,8 @@
      inkscape:guide-bbox="true"
      inkscape:window-width="1139"
      inkscape:window-height="593"
-     inkscape:window-x="43"
-     inkscape:window-y="23"
+     inkscape:window-x="17"
+     inkscape:window-y="28"
      inkscape:window-maximized="0">
     <sodipodi:guide
        orientation="1,0"
@@ -92,7 +92,8 @@
        y="128"
        transform="translate(0,28.36215)"
        ry="5.942245"
-       inkscape:export-xdpi="56.963184"
-       inkscape:export-ydpi="56.963184" />
+       inkscape:export-xdpi="57.251907"
+       inkscape:export-ydpi="57.251907"
+       inkscape:export-filename="/Users/rpark/github/dipper/src/java/images/mask.png" />
   </g>
 </svg>

@@ -33,9 +33,7 @@ public class BorderSprites {
 		
 		BufferedImage mainImage = ImageIO.read(backgroundStream);
 		BufferedImage scaledImage = (BufferedImage)mainImage.getScaledInstance(resizeW, resizeH, Image.SCALE_AREA_AVERAGING);
-		if (mainImage == null) {
-			throw new IOException("Image " + resource + " not found.");
-		}
+
 		createSpritesFromImage(scaledImage, left, right, top, bottom);	
 	}
 

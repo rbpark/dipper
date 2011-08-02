@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import javax.swing.JFrame;
 
+import dipper.app.DipperAppController;
 import dipper.desktop.ui.DipperMainPanel;
 import dipper.utils.PropertyUtils;
 
@@ -13,17 +14,20 @@ public class DipperFrame extends JFrame {
 	private static final String WIDTH_PROPERTY = "width";
 	private static final String HEIGHT_PROPERTY = "height";
 	
+	private DipperAppController controller;
+	
 	public DipperFrame(Properties props) {
 		this.setTitle("Dipper Desktop");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		extractProperties(props);
-		setupPanels();
 		
+		controller = new DipperAppController();
+		setupPanels();
 		this.setVisible(true);
 	}
 	
 	private void setupPanels() {
-		DipperMainPanel mainPanel = new DipperMainPanel();
+		DipperMainPanel mainPanel = new DipperMainPanel(controller);
 		this.setContentPane(mainPanel);
 		this.setMinimumSize(new Dimension(450, 450));
 	}

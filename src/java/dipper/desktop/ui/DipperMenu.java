@@ -19,10 +19,13 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import dipper.desktop.ui.event.DipperMenuListener;
 import dipper.desktop.ui.interpolate.OpacityComponent;
 import dipper.desktop.ui.interpolate.OpacityInterpolator;
 
@@ -30,6 +33,7 @@ public class DipperMenu extends JPanel implements OpacityComponent {
 	private static final long serialVersionUID = 252808975643487376L;
 	private static final String DIPPER_IMG_PATH = "images/dipper.png";
 	private ArrayList<MenuItem> menuItems = new ArrayList<MenuItem>();
+	
 	private float radius = 200;
 	private Point center = new Point(20, -110);
 	private float startDegree = 35f*(float)(Math.PI/180f);
@@ -42,6 +46,8 @@ public class DipperMenu extends JPanel implements OpacityComponent {
 	
 	private float menuOpacity = 1f;
 	private boolean menuVisible = true;
+	
+	private Collection<DipperMenuListener> attachedListeners = new LinkedHashSet<DipperMenuListener>();
 	
 	private static BufferedImage dipperImage;
 	static {
@@ -70,6 +76,20 @@ public class DipperMenu extends JPanel implements OpacityComponent {
 		interpolator = new OpacityInterpolator(this);
 		menuListener = new MenuMouseMotionListener();
 		this.setMenuVisibility(true);
+	}
+	
+	public void addMenuListener(DipperMenuListener l) {
+		attachedListeners.add(l);
+	}
+	
+	public void remove(DipperMenuListener l) {
+		attachedListeners.remove(l);
+	}
+	
+	protected void fireMenuItemSelectedEvent(MenuItem item) {
+		for (DipperMenuListener l: attachedListeners) {
+			l.menuItemSelected(item);
+		}
 	}
 	
 	public void toggleMenuVisiblity() {
@@ -381,12 +401,16 @@ public class DipperMenu extends JPanel implements OpacityComponent {
 				}
 				else {
 					System.out.println("Hover " + hovered.getName() + " released.");
+					fireMenuItemSelectedEvent(hovered);
 				}
 			}
 		}
 	}
 
-
+	public MenuItem getMenuItem(int idx) {
+		return menuItems.get(idx);
+	}
+	
 	@Override
 	public void setOpacity(float f) {
 		// TODO Auto-generated method stub
