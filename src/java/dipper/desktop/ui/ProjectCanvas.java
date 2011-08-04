@@ -55,6 +55,8 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	private DipperProject project = null;
 	
 	private static BorderSprites buttonSprites;
+
+	private boolean imageDirty = true;
 	
 	static {
 		try {
@@ -116,8 +118,11 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	public synchronized void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 		if (image != null) {
-			Graphics2D imageG2d = (Graphics2D)image.getGraphics();
-			internalRedraw(imageG2d, false);
+			if (imageDirty) {
+				Graphics2D imageG2d = (Graphics2D)image.getGraphics();
+				internalRedraw(imageG2d, false);
+				imageDirty = false;
+			}
 			g2d.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
 		}
 	}
@@ -169,7 +174,13 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		}
 
 	}
-
+	
+	private void imageDirty() {
+		imageDirty = true;
+		repaint(15);
+	}
+	
+	
 	public void reposition() {
 		Component parent = getParent();
 		if (parent != null) {
@@ -261,7 +272,7 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		this.ty = ty;
 
 		recalcTransform();
-		repaint(15);
+		imageDirty();
 	}
 	
 	private class UpdateSize extends Thread {
@@ -298,8 +309,8 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	
 	private void resizeIfNecessary() {
 		if (image == null || image.getWidth() != this.getWidth() || image.getHeight() != this.getHeight()) {
-			image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);	
-			repaint(15);
+			image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			imageDirty();
 		}
 	}
 

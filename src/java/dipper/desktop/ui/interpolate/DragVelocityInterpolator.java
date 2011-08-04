@@ -2,10 +2,10 @@ package dipper.desktop.ui.interpolate;
 
 public class DragVelocityInterpolator implements ValueInterpolator {
 	private long currentTimeMS = -1;
-	private double maxVelocity = 100;
+	private double maxVelocity = 50;
 
 	private double velocityThreshold = 0.01;
-	private double decelerationPerMS = 1.0/15.0;
+	private double decelerationPerMS = 1.0/10.0;
 	
 	private double vx;
 	private double vy;

@@ -71,7 +71,7 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 		
 		rightPanel = new SliderPanel(SliderPanel.BIND_RIGHT);
 		rightPanel.setDimension(RIGHT_MENU_WIDTH);
-		rightPanel.setMargins(10, 0, 40, 310);
+		rightPanel.setMargins(10, 0, 40, 250);
 		rightPanel.setExpanded(false);
 		this.add(rightPanel);
 		
@@ -85,7 +85,7 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 		
 		resetPanels();
 	}
-	
+
 	public void resetPanels() {
 		DipperProject proj = appController.getActiveProject();
 		if (proj == null) {
