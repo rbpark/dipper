@@ -7,12 +7,14 @@ import java.awt.Composite;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.CubicCurve2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.VolatileImage;
 import java.io.IOException;
 
 import javax.swing.JPanel;
@@ -44,7 +46,7 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	private Color gridColor = new Color(.5f,.5f,.5f,0.3f);
 	private Color blank = new Color(1f,1f,1f,0.0f);
 	
-	private BufferedImage image;
+	private VolatileImage image;
 	private AffineTransform transform;
 	private static BorderSprites maskSprites;
 	private DragVelocityInterpolator interp;
@@ -110,6 +112,9 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	public void doLayout() {
 		recalcTransform();
 		//image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		this.setSize(getParent().getWidth() - leftMargin - rightMargin, getParent().getHeight() - topMargin - bottomMargin);
+		
+		System.out.println("Do layout " + getParent());
 		sizeThread.tick();
 		repaint(15);
 	}
@@ -118,7 +123,8 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	public synchronized void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 		if (image != null) {
-			if (imageDirty) {
+			GraphicsConfiguration gc = this.getGraphicsConfiguration();
+			if (imageDirty || image.validate(gc) == VolatileImage.IMAGE_RESTORED) {
 				Graphics2D imageG2d = (Graphics2D)image.getGraphics();
 				internalRedraw(imageG2d, false);
 				imageDirty = false;
@@ -309,7 +315,10 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	
 	private void resizeIfNecessary() {
 		if (image == null || image.getWidth() != this.getWidth() || image.getHeight() != this.getHeight()) {
-			image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			GraphicsConfiguration gc = this.getGraphicsConfiguration();
+			image = gc.createCompatibleVolatileImage(this.getWidth(), this.getHeight(), VolatileImage.TRANSLUCENT);
+			image.setAccelerationPriority(1.0f);
+			image.validate(gc);
 			imageDirty();
 		}
 	}

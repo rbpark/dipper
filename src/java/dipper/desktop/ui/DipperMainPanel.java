@@ -30,6 +30,7 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 	private BottomPanel bottomPanel;
 	private ProjectCanvas documentPanel;
 	private DipperMenu dipperMenu;
+	private ProjectSplitPane splitPane;
 	
 	private DipperAppController appController;
 	private DipperMenu.MenuItem saveAs;
@@ -47,10 +48,7 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 					DipperMainPanel.class.getClassLoader().getResourceAsStream(BACKGROUND_IMG_PATH));
 			backgroundImage = ImageIO.read(backgroundStream);
 			resizedImageBackground = backgroundImage;
-//			resizedImageBackground = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
-//			Graphics2D g = resizedImageBackground.createGraphics();
-//			g.drawImage(backgroundImage, 0, 0, 256, 256, null);
-//			g.dispose();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -79,10 +77,12 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 		bottomPanel = new BottomPanel();
 		bottomPanel.setExpanded(false);
 		this.add(bottomPanel);
-		
+
 		documentPanel = new ProjectCanvas();
+//		splitPane = new ProjectSplitPane();
+//		splitPane.setCanvas(documentPanel);
+//		this.add(splitPane);	
 		this.add(documentPanel);
-		
 		resetPanels();
 	}
 
