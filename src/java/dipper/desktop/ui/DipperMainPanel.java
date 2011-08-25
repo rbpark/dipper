@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -41,7 +42,7 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 	private DipperMenu.MenuItem save;
 	
 	public DipperMainPanel(DipperAppController controller) {
-		this.setLayout(null);
+		this.setLayout(new MainPanelLayoutManager());
 		this.setDoubleBuffered(true);
 		
 		appController = controller;
@@ -108,15 +109,6 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 		}
 	}
 	
-	public void doLayout() {
-		super.doLayout();
-		rightPanel.reposition();
-		bottomPanel.reposition();
-		if (documentPanel != null) {
-			documentPanel.reposition();
-		}
-	}
-	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -150,8 +142,28 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 
 		@Override
 		public void layoutContainer(Container arg0) {
-			// TODO Auto-generated method stub
+			rightPanel.reposition();
+			bottomPanel.reposition();
 			
+			if (documentPanel != null) {
+				int iLeft = 0;
+				int iRight = 0;
+				int iTop = 0;
+				int iBottom = 0;
+				
+				Insets inset = documentPanel.getInsets();
+				if (inset != null) {
+					iLeft = inset.left;
+					iRight = inset.right;
+					iTop = inset.top;
+					iBottom = inset.bottom;
+				}
+				documentPanel.setLocation(iLeft, iTop);
+				int width = getWidth();
+				int height = getHeight();
+				
+				documentPanel.setSize(width - iLeft - iRight, height - iTop - iBottom);
+			}
 		}
 
 		@Override
@@ -171,6 +183,5 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 			// TODO Auto-generated method stub
 			
 		}
-		
 	}
 }

@@ -8,6 +8,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -60,6 +61,8 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 
 	private boolean imageDirty = true;
 	
+	private Insets inset;
+	
 	static {
 		try {
 			maskSprites = new BorderSprites();
@@ -81,9 +84,8 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		this.addMouseMotionListener(listener);
 		this.setBackground(new Color(1f,1f,1f,0.5f));
 		this.setLayout(null);
-		
-		this.setLocation(leftMargin, topMargin);
-		this.reposition();
+		this.inset = new Insets(topMargin, leftMargin, bottomMargin, rightMargin);
+
 		
 		interp = new DragVelocityInterpolator(this);
 		
@@ -95,6 +97,11 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		recalcTransform();
 		
 		sizeThread.start();
+	}
+	
+	@Override
+	public Insets getInsets() {
+		return inset;
 	}
 	
 	private void recalcTransform() {
@@ -111,10 +118,9 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	@Override
 	public void doLayout() {
 		recalcTransform();
-		//image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		this.setSize(getParent().getWidth() - leftMargin - rightMargin, getParent().getHeight() - topMargin - bottomMargin);
 		
-		System.out.println("Do layout " + getParent());
+		//System.out.println("Do layout " + getParent());
 		sizeThread.tick();
 		repaint(15);
 	}
@@ -185,15 +191,7 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		imageDirty = true;
 		repaint(15);
 	}
-	
-	
-	public void reposition() {
-		Component parent = getParent();
-		if (parent != null) {
-			this.setSize(getParent().getWidth() - leftMargin - rightMargin, getParent().getHeight() - topMargin - bottomMargin);
-		}
-	}
-	
+		
 	public class CanvasMouseListener implements MouseListener, MouseMotionListener {
 		long currentTime = -1; 
 		int px;
