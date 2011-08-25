@@ -220,23 +220,23 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 			currentTime = System.currentTimeMillis();
 			px = e.getX();
 			py = e.getY();
-			interp.setVelocity(0, 0);
+			//interp.setVelocity(0, 0);
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			long time = (System.currentTimeMillis() - currentTime);
-			if (time > 100) {
-				return;
-			}
-			
-			//dx = e.getX() - px;
-			//dy = e.getY() - py;
-			//	System.out.println("D:" + dx+ "," + dy + " time:" + time);
-			double vx = dx / (time + 1);
-			double vy = dy / (time + 1);
-
-			interp.setVelocity(vx, vy);
+//			long time = (System.currentTimeMillis() - currentTime);
+//			if (time > 100) {
+//				return;
+//			}
+//			
+//			//dx = e.getX() - px;
+//			//dy = e.getY() - py;
+//			//	System.out.println("D:" + dx+ "," + dy + " time:" + time);
+//			double vx = dx / (time + 1);
+//			double vy = dy / (time + 1);
+//
+//			interp.setVelocity(vx, vy);
 		}
 
 		@Override

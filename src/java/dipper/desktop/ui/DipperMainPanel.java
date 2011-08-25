@@ -1,8 +1,12 @@
 package dipper.desktop.ui;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.LayoutManager;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -29,8 +33,8 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 	private SliderPanel rightPanel;
 	private BottomPanel bottomPanel;
 	private ProjectCanvas documentPanel;
+	
 	private DipperMenu dipperMenu;
-	private ProjectSplitPane splitPane;
 	
 	private DipperAppController appController;
 	private DipperMenu.MenuItem saveAs;
@@ -42,7 +46,7 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 		
 		appController = controller;
 		appController.addWorkspaceChangeListener(this);
-		
+
 		try {
 			InputStream backgroundStream = new BufferedInputStream(
 					DipperMainPanel.class.getClassLoader().getResourceAsStream(BACKGROUND_IMG_PATH));
@@ -136,4 +140,37 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 		}
 	}
 
+	public class MainPanelLayoutManager implements LayoutManager {
+
+		@Override
+		public void addLayoutComponent(String arg0, Component arg1) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void layoutContainer(Container arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public Dimension minimumLayoutSize(Container arg0) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Dimension preferredLayoutSize(Container arg0) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void removeLayoutComponent(Component arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
 }
