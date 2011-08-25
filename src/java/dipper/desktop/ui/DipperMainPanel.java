@@ -34,6 +34,7 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 	private SliderPanel rightPanel;
 	private BottomPanel bottomPanel;
 	private ProjectCanvas documentPanel;
+	private DipperSplitPane splitPane;
 	
 	private DipperMenu dipperMenu;
 	
@@ -83,11 +84,11 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 		bottomPanel.setExpanded(false);
 		this.add(bottomPanel);
 
+		
 		documentPanel = new ProjectCanvas();
-//		splitPane = new ProjectSplitPane();
-//		splitPane.setCanvas(documentPanel);
-//		this.add(splitPane);	
-		this.add(documentPanel);
+		splitPane = new DipperSplitPane(documentPanel, new ViewerPanel());
+		
+		this.add(splitPane);
 		resetPanels();
 	}
 
@@ -95,14 +96,16 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 		DipperProject proj = appController.getActiveProject();
 		if (proj == null) {
 			bottomPanel.setVisible(false);
-			documentPanel.setVisible(false);
+			splitPane.setVisible(false);
+			//documentPanel.setVisible(false);
 			rightPanel.setVisible(false);
 			saveAs.setEnabled(false);
 			save.setEnabled(false);
 		}
 		else {
 			bottomPanel.setVisible(true);
-			documentPanel.setVisible(true);
+			splitPane.setVisible(true);
+			//documentPanel.setVisible(true);
 			rightPanel.setVisible(true);
 			saveAs.setEnabled(true);
 			save.setEnabled(true);
@@ -144,26 +147,28 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 		public void layoutContainer(Container arg0) {
 			rightPanel.reposition();
 			bottomPanel.reposition();
+			splitPane.setLocation(0,0);
+			splitPane.setSize(getWidth(), getHeight());
 			
-			if (documentPanel != null) {
-				int iLeft = 0;
-				int iRight = 0;
-				int iTop = 0;
-				int iBottom = 0;
-				
-				Insets inset = documentPanel.getInsets();
-				if (inset != null) {
-					iLeft = inset.left;
-					iRight = inset.right;
-					iTop = inset.top;
-					iBottom = inset.bottom;
-				}
-				documentPanel.setLocation(iLeft, iTop);
-				int width = getWidth();
-				int height = getHeight();
-				
-				documentPanel.setSize(width - iLeft - iRight, height - iTop - iBottom);
-			}
+//			if (documentPanel != null) {
+//				int iLeft = 0;
+//				int iRight = 0;
+//				int iTop = 0;
+//				int iBottom = 0;
+//				
+//				Insets inset = documentPanel.getInsets();
+//				if (inset != null) {
+//					iLeft = inset.left;
+//					iRight = inset.right;
+//					iTop = inset.top;
+//					iBottom = inset.bottom;
+//				}
+//				documentPanel.setLocation(iLeft, iTop);
+//				int width = getWidth();
+//				int height = getHeight();
+//				
+//				documentPanel.setSize(width - iLeft - iRight, height - iTop - iBottom);
+//			}
 		}
 
 		@Override

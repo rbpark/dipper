@@ -13,8 +13,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.CubicCurve2D;
-import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
 import java.io.IOException;
 
@@ -30,10 +28,10 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	private static final String BACKGROUND_IMG_PATH = "images/mask.png";
 	private static final String DOCUMENT_IMG_PATH = "images/documentBackground.png";
 	
-	private int topMargin = 50;
-	private int bottomMargin = 50;
-	private int leftMargin = 50;
-	private int rightMargin = 50;
+	private int topMargin = 15;
+	private int bottomMargin = 20;
+	private int leftMargin = 10;
+	private int rightMargin = 10;
 	
 	private double tx;
 	private double ty;
@@ -118,7 +116,7 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	@Override
 	public void doLayout() {
 		recalcTransform();
-		this.setSize(getParent().getWidth() - leftMargin - rightMargin, getParent().getHeight() - topMargin - bottomMargin);
+		//this.setSize(getParent().getWidth() - leftMargin - rightMargin, getParent().getHeight() - topMargin - bottomMargin);
 		
 		//System.out.println("Do layout " + getParent());
 		sizeThread.tick();
@@ -312,6 +310,9 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	}
 	
 	private void resizeIfNecessary() {
+		if (this.getWidth() <= 0 || this.getHeight() <= 0) {
+			return;
+		}
 		if (image == null || image.getWidth() != this.getWidth() || image.getHeight() != this.getHeight()) {
 			GraphicsConfiguration gc = this.getGraphicsConfiguration();
 			image = gc.createCompatibleVolatileImage(this.getWidth(), this.getHeight(), VolatileImage.TRANSLUCENT);
