@@ -2,9 +2,7 @@ package dipper.desktop.ui;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Composite;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -19,7 +17,6 @@ import java.io.IOException;
 import javax.swing.JPanel;
 
 import dipper.app.DipperProject;
-import dipper.desktop.ui.interpolate.DragVelocityInterpolator;
 import dipper.desktop.ui.interpolate.TranslateComponent;
 
 public class ProjectCanvas extends JPanel implements TranslateComponent {
@@ -48,7 +45,6 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	private VolatileImage image;
 	private AffineTransform transform;
 	private static BorderSprites maskSprites;
-	private DragVelocityInterpolator interp;
 	
 	private double gridDistance = 32;
 	private boolean drawGrid = true;
@@ -83,9 +79,6 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		this.setBackground(new Color(1f,1f,1f,0.5f));
 		this.setLayout(null);
 		this.inset = new Insets(topMargin, leftMargin, bottomMargin, rightMargin);
-
-		
-		interp = new DragVelocityInterpolator(this);
 		
 		this.tx = 0.0;
 		this.ty = 0.0;

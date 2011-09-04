@@ -5,6 +5,8 @@ import java.awt.Color;
 import javax.swing.JPanel;
 
 public class ViewerPanel extends JPanel {
+	private static final long serialVersionUID = 7802775329562494153L;
+
 	public ViewerPanel() {
 		this.setLayout(null);
 		this.setOpaque(true);

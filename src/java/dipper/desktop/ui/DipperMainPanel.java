@@ -6,15 +6,16 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Properties;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 import dipper.app.DipperAppController;
 import dipper.app.DipperProject;
@@ -22,6 +23,7 @@ import dipper.app.event.WorkspaceChangedEvent;
 import dipper.app.event.WorkspaceChangedListener;
 import dipper.desktop.ui.DipperMenu.MenuItem;
 import dipper.desktop.ui.event.DipperMenuListener;
+import dipper.utils.PropertyUtils;
 
 public class DipperMainPanel extends JPanel implements WorkspaceChangedListener, DipperMenuListener {
 	private static final long serialVersionUID = 7143502855240909560L;
@@ -29,20 +31,20 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 	private BufferedImage backgroundImage;
 	private BufferedImage resizedImageBackground;
 	
+	private static final String DIVIDER_POSITION = "divider.position";
 	private static final int RIGHT_MENU_WIDTH = 300;
 	
 	private SliderPanel rightPanel;
 	private BottomPanel bottomPanel;
 	private ProjectCanvas documentPanel;
-	private DipperSplitPane splitPane;
-	
+	private JSplitPane splitPane;
 	private DipperMenu dipperMenu;
 	
 	private DipperAppController appController;
 	private DipperMenu.MenuItem saveAs;
 	private DipperMenu.MenuItem save;
 	
-	public DipperMainPanel(DipperAppController controller) {
+	public DipperMainPanel(Properties props, DipperAppController controller) {
 		this.setLayout(new MainPanelLayoutManager());
 		this.setDoubleBuffered(true);
 		
@@ -79,19 +81,25 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 		rightPanel.setExpanded(false);
 		this.add(rightPanel);
 		
-
 		bottomPanel = new BottomPanel();
 		bottomPanel.setExpanded(false);
 		this.add(bottomPanel);
-
 		
 		documentPanel = new ProjectCanvas();
-		splitPane = new DipperSplitPane(documentPanel, new ViewerPanel());
+		//splitPane = new DipperSplitPane(documentPanel, new ViewerPanel());
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, documentPanel, new ViewerPanel());
+		splitPane.setOpaque(false);
 		
 		this.add(splitPane);
+		setupPanels(props);
 		resetPanels();
 	}
 
+	private void setupPanels(Properties props) {
+		int position = PropertyUtils.getInt(props, DIVIDER_POSITION, 300);
+		splitPane.setDividerLocation(position);
+	}
+	
 	public void resetPanels() {
 		DipperProject proj = appController.getActiveProject();
 		if (proj == null) {
@@ -188,5 +196,9 @@ public class DipperMainPanel extends JPanel implements WorkspaceChangedListener,
 			// TODO Auto-generated method stub
 			
 		}
+	}
+	
+	public void fillProperties(Properties props) {
+		props.put(DIVIDER_POSITION, String.valueOf(splitPane.getDividerLocation()));
 	}
 }
