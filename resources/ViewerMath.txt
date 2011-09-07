@@ -1,0 +1,41 @@
+// The only real variables you'll need for the viewer
+double translateX;
+double translateY;
+double scale;
+double maxZoom;
+double minZoom;
+Matrix transform;
+
+// Zoom in at particular point where x, y is absolute in viewer
+void zoomGraph(double newScale, double x, double y) {
+	if (scale > maxZoom) {
+		scale = maxZoom;
+	} 
+	else if (scale < minZoom) {
+		scale = minZoom;
+	}
+	
+	double scaleFactor = newScale / scale;
+	if (scaleFactor == 1) return;
+	
+	translateX = scaleFactor*(translateX - x) + x;
+	translateY = scaleFactor*(translateY - y) + y;
+	
+	recalcTransform();
+}
+
+void recalcTransform() {
+	transform = Translate(translateX, translateY) * Scale(scale);
+}
+
+void moveNode(Node node, double x, double y) {
+	node.x += x / scale;
+	node.y += y / scale;
+}
+
+void panGraph(double deltaX, double deltaY) {
+	translateX += deltaX;
+	translateY += deltaY;
+	
+	recalcTransform();
+}

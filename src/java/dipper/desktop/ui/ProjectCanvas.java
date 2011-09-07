@@ -30,9 +30,11 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	private int leftMargin = 10;
 	private int rightMargin = 10;
 	
-	private double tx;
-	private double ty;
+	private double translateX;
+	private double translateY;
 	private double scale;
+	private static final double MAX_SCALE = 5;
+	private static final double MIN_SCALE = 0.1;
 	
 	private double x1;
 	private double x2;
@@ -80,10 +82,10 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		this.setLayout(null);
 		this.inset = new Insets(topMargin, leftMargin, bottomMargin, rightMargin);
 		
-		this.tx = 0.0;
-		this.ty = 0.0;
+		this.translateX = 0.0;
+		this.translateY = 0.0;
 		
-		this.scale = 1.0;
+		this.scale = 1.5;
 		transform = new AffineTransform();
 		recalcTransform();
 		
@@ -95,15 +97,32 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		return inset;
 	}
 	
+	private void scale(double newScale, double x, double y) {
+		if (newScale > MAX_SCALE) {
+			scale = MAX_SCALE;
+		} 
+		else if (newScale < MIN_SCALE) {
+			scale = MIN_SCALE;
+		}
+		
+		double scaleFactor = newScale / scale;
+		if (scaleFactor == 1) return;
+		
+		translateX = scaleFactor*(translateX - x) + x;
+		translateY = scaleFactor*(translateY - y) + y;
+		
+		recalcTransform();
+	}
+	
 	private void recalcTransform() {
 		transform.setToIdentity();
+		transform.translate(translateX, translateY);
 		transform.scale(scale, scale);
-		transform.translate(tx, ty);
 		
-		x1 = -tx;
-		y1 = -ty;
-		x2 = getWidth() + x1;
-		y2 = getHeight() + y2;
+		x1 = -translateX/scale;
+		y1 = -translateY/scale;
+		x2 = getWidth()/scale + x1;
+		y2 = getHeight()/scale + y1;
 	}
 	
 	@Override
@@ -183,6 +202,17 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		repaint(15);
 	}
 		
+	void translateGraph(double deltaX, double deltaY) {
+		if (Double.isNaN(deltaX) || Double.isNaN(deltaY) || Double.isInfinite(deltaX) || Double.isInfinite(deltaY)) {
+			return;
+		}
+		translateX += deltaX;
+		translateY += deltaY;
+
+		recalcTransform();
+		imageDirty();
+	}
+	
 	public class CanvasMouseListener implements MouseListener, MouseMotionListener {
 		long currentTime = -1; 
 		int px;
@@ -236,7 +266,7 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 			px = e.getX();
 			py = e.getY();
 			
-			setTranslate(tx + dx, ty + dy);
+			translateGraph(dx, dy);
 		}
 
 		@Override
@@ -249,13 +279,13 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	@Override
 	public double getTranslateX() {
 		// TODO Auto-generated method stub
-		return tx;
+		return translateX;
 	}
 
 	@Override
 	public double getTranslateY() {
 		// TODO Auto-generated method stub
-		return ty;
+		return translateY;
 	}
 
 	@Override
@@ -263,8 +293,8 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		if (Double.isNaN(tx) || Double.isNaN(ty) || Double.isInfinite(tx) || Double.isInfinite(ty)) {
 			return;
 		}
-		this.tx = tx;
-		this.ty = ty;
+		this.translateX = tx;
+		this.translateY = ty;
 
 		recalcTransform();
 		imageDirty();
