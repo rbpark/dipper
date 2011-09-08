@@ -301,10 +301,10 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 				scaleDelta(-rotation, e.getX(), e.getY());
 			}
 			else if (e.isShiftDown()) {
-				translateGraph(-rotation*2, 0);
+				translateGraph(-rotation*5, 0);
 			}
 			else {
-				translateGraph(0, -rotation*2);
+				translateGraph(0, -rotation*5);
 			}
 		}
 		
