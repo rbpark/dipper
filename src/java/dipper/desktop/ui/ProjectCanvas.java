@@ -37,15 +37,15 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	private double scale;
 	private static final double MAX_SCALE = 5;
 	private static final double MIN_SCALE = 0.1;
-	private static final double[] SCALE_LEVELS = { 0.2, 0.25, 0.3, 0.4, 0.5, 0.7, 1.0, 1.3, 1.6, 2.0, 2.4, 3.0, 3.5, 4.0, 4.5, 5.0};
-	private int level = 5;
+	private static final double[] SCALE_LEVELS = { 0.35, 0.362, 0.375, 0.4, 0.45, 0.5, 0.6, 0.7, 1.0, 1.3, 1.6, 2.0, 2.4, 3.0, 3.5};
+	private int level = 8;
 	
 	private double x1;
 	private double x2;
 	private double y1;
 	private double y2;
 	
-	private Color gridColor = new Color(.5f,.5f,.5f,0.3f);
+	private Color gridColor = new Color(.5f,.5f,.5f,0.2f);
 	private Color blank = new Color(1f,1f,1f,0.0f);
 	
 	private VolatileImage image;
@@ -189,6 +189,7 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 			// Horizontal Lines
 			double startX = Math.floor(y1/gridDistance)*gridDistance;
 			double endX = Math.ceil(y2/gridDistance)*gridDistance;
+			
 			while (startX <= endX) {
 				g2d.drawLine((int)x1, (int)startX, (int)x2, (int)startX);
 				//g2d.fillRect((int)x1, (int)startX, (int)(x2-x1), 2);
