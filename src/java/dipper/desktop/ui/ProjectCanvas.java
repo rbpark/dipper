@@ -10,6 +10,8 @@ import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.VolatileImage;
 import java.io.IOException;
@@ -35,6 +37,8 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 	private double scale;
 	private static final double MAX_SCALE = 5;
 	private static final double MIN_SCALE = 0.1;
+	private static final double[] SCALE_LEVELS = { 0.2, 0.25, 0.3, 0.4, 0.5, 0.7, 1.0, 1.3, 1.6, 2.0, 2.4, 3.0, 3.5, 4.0, 4.5, 5.0};
+	private int level = 5;
 	
 	private double x1;
 	private double x2;
@@ -78,6 +82,8 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		CanvasMouseListener listener = new CanvasMouseListener();
 		this.addMouseListener(listener);
 		this.addMouseMotionListener(listener);
+		this.addMouseWheelListener(listener);
+		
 		this.setBackground(new Color(1f,1f,1f,0.5f));
 		this.setLayout(null);
 		this.inset = new Insets(topMargin, leftMargin, bottomMargin, rightMargin);
@@ -97,12 +103,24 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		return inset;
 	}
 	
+	private void scaleDelta(int click, double x, double y) {
+		level += click;
+		if (level >= SCALE_LEVELS.length) {
+			level = SCALE_LEVELS.length - 1;
+		}
+		else if (level < 0) {
+			level = 0;
+		}
+		
+		scale(SCALE_LEVELS[level], x, y);
+	}
+	
 	private void scale(double newScale, double x, double y) {
 		if (newScale > MAX_SCALE) {
-			scale = MAX_SCALE;
+			newScale = MAX_SCALE;
 		} 
 		else if (newScale < MIN_SCALE) {
-			scale = MIN_SCALE;
+			newScale = MIN_SCALE;
 		}
 		
 		double scaleFactor = newScale / scale;
@@ -110,8 +128,10 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		
 		translateX = scaleFactor*(translateX - x) + x;
 		translateY = scaleFactor*(translateY - y) + y;
+		scale = newScale;
 		
 		recalcTransform();
+		imageDirty();
 	}
 	
 	private void recalcTransform() {
@@ -213,7 +233,7 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		imageDirty();
 	}
 	
-	public class CanvasMouseListener implements MouseListener, MouseMotionListener {
+	public class CanvasMouseListener implements MouseListener, MouseMotionListener, MouseWheelListener {
 		long currentTime = -1; 
 		int px;
 		int py;
@@ -273,6 +293,21 @@ public class ProjectCanvas extends JPanel implements TranslateComponent {
 		public void mouseMoved(MouseEvent e) {
 			
 		}
+
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			int rotation = e.getWheelRotation();
+			if (e.isMetaDown()) {
+				scaleDelta(-rotation, e.getX(), e.getY());
+			}
+			else if (e.isShiftDown()) {
+				translateGraph(-rotation*2, 0);
+			}
+			else {
+				translateGraph(0, -rotation*2);
+			}
+		}
+		
 		
 	}
 	
