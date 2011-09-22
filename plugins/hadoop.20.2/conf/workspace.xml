@@ -1,0 +1,5 @@
+<workspace name="Hadoop 20.2" version="0.1">
+	<library>
+		<path>lib</path>
+	</library>
+</workspace>

@@ -1,6 +1,0 @@
-<nodes>
-	<node name="Hdfs" class="dipper.nodes.HdfsDataInputNode" category="data">
-		<class>dipper.nodes.HdfsDataInputNode</class>
-		<group>data</group>
-	</node>
-</nodes>
