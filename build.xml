@@ -18,11 +18,11 @@
         
 	<target name="jars" depends="clean" description="Compile main source tree java files">
                 <echo message="building dipper.jar" />
-                <subant target="jars">
+                <subant target="all">
                         <fileset dir="dipper" includes="build.xml" />
                 </subant>
                 <echo message="building plugins" />
-                <subant target="jars">
+                <subant target="all">
                         <fileset dir="plugins" includes="build.xml" />
                 </subant>
         </target>

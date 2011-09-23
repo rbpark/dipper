@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<project name="hadoop.20.2" basedir="." default="all">
+	<property name="name" value="hadoop.20.2" />
+	<property name="dipper.lib.dir" value="${basedir}/../../dipper/dist" />
+	<property name="module.base.dir" value="${basedir}/." />
+	<property file="${module.base.dir}/build.properties" />
+		
+	<property name="module.dist.dir" value="${module.base.dir}/dist" />
+	<property name="module.dist.package.dir" value="${module.dist.dir}/package" />
+	<property name="module.dist.classes.dir" value="${module.dist.dir}/classes" />
+	<property name="module.dist.jars.dir" value="${module.dist.dir}/jars" />
+	<property name="module.java.dir" value="${module.base.dir}/src/java" />
+	
+	<property name="name" value="hadoop.20.2" />
+	<property name="display.name" value="Hadoop 20.2 Plugin" />
+	<property name="author" value="Richard Park" />
+	<property environment="env" />
+	
+	<path id="main.classpath">
+		<fileset dir="${module.base.dir}/lib">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${dipper.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement path="${module.dist.classes.dir}" />
+	</path>
+
+	<macrodef name="replace-dir">
+		<attribute name="dir" />
+		<sequential>
+			<delete dir="@{dir}" />
+			<mkdir dir="@{dir}" />
+		</sequential>
+	</macrodef>
+	
+	<target name="all" depends="clean, jars" description="Builds all.." />
+	
+	<target name="clean" description="Delete generated files.">
+		<delete dir="${module.dist.dir}" />
+	</target>
+	
+	<target name="build" description="Compile main source tree java files" depends="clean">
+		<mkdir dir="${module.dist.classes.dir}" />
+		
+		<javac fork="true" destdir="${module.dist.classes.dir}"
+			target="1.6" debug="true" deprecation="false" failonerror="true">
+			<src path="${module.java.dir}" />
+			<classpath refid="main.classpath" />
+		</javac>
+	</target>
+	
+	<target name="jars" depends="build" description="Build server jar file">
+		<mkdir dir="${module.dist.dir}" />
+		<jar destfile="${module.dist.dir}/${package.name}.jar">
+			<fileset dir="${module.dist.dir}">
+				<include name="**/*.*" />
+			</fileset>
+		</jar>
+	</target>
+</project>
