@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<project name="dipper" basedir="." default="all">
+	<property name="dipper.base.dir" value="${basedir}/.." />
+	<property name="dipper.app.dir" value="${basedir}/." />
+	<property file="${dipper.app.dir}/build.properties" />
+		
+	<property name="dipper.dist.dir" value="${dipper.app.dir}/dist" />
+	<property name="dipper.classes.dir" value="${dipper.dist.dir}/dipper/classes" />
+	<property name="dipper.jars.dir" value="${dipper.dist.dir}/dipper/jars" />
+	<property name="dipper.java.dir" value="${dipper.app.dir}/src/java" />
+	
+	<property name="name" value="dipper" />
+	<property name="display.name" value="Dipper" />
+	<property name="author" value="Richard Park" />
+	<property environment="env" />
+	
+	<path id="main.classpath">
+		<fileset dir="${dipper.app.dir}/lib">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement path="${dipper.classes.dir}" />
+	</path>
+
+	<macrodef name="replace-dir">
+		<attribute name="dir" />
+		<sequential>
+			<delete dir="@{dir}" />
+			<mkdir dir="@{dir}" />
+		</sequential>
+	</macrodef>
+	
+	<target name="all" depends="clean, jars" description="Builds all.." />
+	
+	<target name="clean" description="Delete generated files.">
+		<delete dir="${dipper.dist.dir}" />
+	</target>
+	
+	<target name="build" description="Compile main source tree java files" depends="clean">
+		<mkdir dir="${dipper.classes.dir}" />
+		<mkdir dir="${dipper.classes.dir}/images" />
+		<copy todir="${dipper.classes.dir}/images">
+			<fileset dir="${dipper.java.dir}/images">
+			</fileset>
+		</copy>
+		
+		<javac fork="true" destdir="${dipper.classes.dir}"
+			target="1.6" debug="true" deprecation="false" failonerror="true">
+			<src path="${dipper.java.dir}" />
+			<classpath refid="main.classpath" />
+		</javac>
+	</target>
+	
+	<target name="jars" depends="build" description="Build server jar file">
+		<mkdir dir="${dipper.dist.dir}" />
+		<jar destfile="${dipper.dist.dir}/dipper-${curr.release}.jar">
+			<fileset dir="${dipper.classes.dir}">
+				<include name="**/*.*" />
+			</fileset>
+		</jar>
+	</target>
+</project>

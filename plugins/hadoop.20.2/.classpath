@@ -4,5 +4,5 @@
 	<classpathentry kind="lib" path="lib/hadoop-0.20.2-core.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/dipper"/>
-	<classpathentry kind="output" path="dist"/>
+	<classpathentry kind="output" path="dist/classes"/>
 </classpath>
