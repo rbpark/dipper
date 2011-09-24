@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<project name="allPlugins" basedir="." default="jars" >
+	<property name="dist.dir" value="${basedir}/dist" />
+	
+	<target name="clean" description="Clean project files">
+		<echo message="Clean projects" />
+		<delete dir="${dist.dir}" />
+	</target>
+	
+	<target name="jars" description="Make plugin jars" depends="clean" >
+		<echo message="Make plugin jars" />
+		<subant target="all">
+			<fileset dir="." includes="*/build.xml" />
+		</subant>
+		
+		<echo message="Copy all jar projects" />
+		<subant target="copyToParent">
+			<fileset dir="." includes="*/build.xml" />
+		</subant>
+	</target>
+</project>

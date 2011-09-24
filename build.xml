@@ -22,7 +22,7 @@
                         <fileset dir="dipper" includes="build.xml" />
                 </subant>
                 <echo message="building plugins" />
-                <subant target="all">
+                <subant target="jars">
                         <fileset dir="plugins" includes="build.xml" />
                 </subant>
         </target>
