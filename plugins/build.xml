@@ -12,10 +12,5 @@
 		<subant target="all">
 			<fileset dir="." includes="*/build.xml" />
 		</subant>
-		
-		<echo message="Copy all jar projects" />
-		<subant target="copyToParent">
-			<fileset dir="." includes="*/build.xml" />
-		</subant>
 	</target>
 </project>

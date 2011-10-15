@@ -10,6 +10,8 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+import dipper.workspace.WorkspaceRegistry;
+
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -17,44 +19,52 @@ import joptsimple.OptionSpec;
 public class DipperDesktopApp {
 	private static final String CONFIG_FILE_DIR = "./conf";
 	private static final String CONFIG_FILE = "dipper-desktop.conf";
+	private static final String PLUGIN_DIR = "./plugin";
+	
 	private static Logger logger = Logger.getLogger(DipperDesktopApp.class);
 	private static File propertiesFile;
+	private static String pluginDir;
 
 	public static void main(String[] args) {
 		OptionParser parser = new OptionParser();
 		OptionSpec<String> confDirOpt = parser.accepts("conf")
-				.withRequiredArg().ofType(String.class).defaultsTo(
-						CONFIG_FILE_DIR);
-
+			.withRequiredArg()
+			.ofType(String.class)
+			.defaultsTo(CONFIG_FILE_DIR);
+		OptionSpec<String> pluginDirOpt = parser.accepts("plugin")
+			.withRequiredArg()
+			.ofType(String.class)
+			.defaultsTo(PLUGIN_DIR);
+		
 		OptionSet options = parser.parse(args);
-
+		
 		String confDirStr = options.valueOf(confDirOpt);
 		File confDir = new File(confDirStr);
 		if (!confDir.exists()) {
-			logger.error("Conf directory " + confDir.getAbsolutePath()
-					+ " doesn't exist.");
+			logger.error("Conf directory " + confDir.getAbsolutePath() + " doesn't exist.");
 			System.exit(-1);
 		}
 
+		pluginDir = options.valueOf(pluginDirOpt);
+		WorkspaceRegistry.get().registerWorkspace(pluginDir);
+		
 		Properties props = new Properties();
 		propertiesFile = new File(confDir, CONFIG_FILE);
 		if (!propertiesFile.exists()) {
-			logger.error("Conf file " + propertiesFile.getAbsolutePath()
-					+ " doesn't exist.");
+			logger.error("Conf file " + propertiesFile.getAbsolutePath() + " doesn't exist.");
 		}
 		else {
 			try {
-				props.load(new BufferedInputStream(new FileInputStream(
-						propertiesFile)));
+				props.load(new BufferedInputStream(new FileInputStream(propertiesFile)));
 			} catch (IOException e) {
-				logger.error("Error reading properties file "
-						+ propertiesFile.getAbsolutePath() + ". " + e.getMessage());
+				logger.error("Error reading properties file " + propertiesFile.getAbsolutePath() + ". " + e.getMessage());
 				System.exit(-1);
 			}
 		}
 
 		final DipperDesktopApp desktop = new DipperDesktopApp(props);
-
+		
+		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				logger.info("Saving settings");
@@ -63,8 +73,7 @@ public class DipperDesktopApp {
 				desktop.fillProperties(props);
 
 				try {
-					props.store(new BufferedOutputStream(new FileOutputStream(
-							propertiesFile)), "Dipper Application Setting");					
+					props.store(new BufferedOutputStream(new FileOutputStream(propertiesFile)), "Dipper Application Setting");					
 				} catch (IOException e) {
 					logger.error("Could not write to file " + propertiesFile);
 				}

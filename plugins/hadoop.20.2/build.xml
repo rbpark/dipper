@@ -1,17 +1,21 @@
 <?xml version="1.0"?>
-<project name="hadoop.20.2" basedir="." default="all">
-	<property name="name" value="hadoop.20.2" />
+<project name="dipper-hadoop.20.2" basedir="." default="all">
+	<property name="name" value="dipper-hadoop.20.2" />
 	<property name="dipper.lib.dir" value="${basedir}/../../dipper/dist" />
 	<property name="module.base.dir" value="${basedir}/." />
 	<property file="${module.base.dir}/build.properties" />
-		
-	<property name="module.dist.dir" value="${module.base.dir}/dist" />
+	
+	<property name="module.dist.dir" value="${module.base.dir}/dist" />	
 	<property name="module.dist.package.dir" value="${module.dist.dir}/package" />
+	<property name="module.dist.plugin.dir" value="${module.dist.package.dir}/${package.name}" />
 	<property name="module.dist.classes.dir" value="${module.dist.dir}/classes" />
 	<property name="module.dist.jars.dir" value="${module.dist.dir}/jars" />
 	<property name="module.java.dir" value="${module.base.dir}/src/java" />
+	<property name="module.conf.dir" value="${module.base.dir}/conf" />
 	
-	<property name="name" value="hadoop.20.2" />
+	<property name="parent.plugin.dir" value="${module.base.dir}/../dist" />
+	
+	<property name="name" value="dipper-hadoop.20.2" />
 	<property name="display.name" value="Hadoop 20.2 Plugin" />
 	<property name="author" value="Richard Park" />
 	<property environment="env" />
@@ -38,6 +42,7 @@
 	
 	<target name="clean" description="Delete generated files.">
 		<delete dir="${module.dist.dir}" />
+		<delete file="${module.base.dir}/${package.name}.jar" />
 	</target>
 	
 	<target name="build" description="Compile main source tree java files" depends="clean">
@@ -51,9 +56,9 @@
 	</target>
 	
 	<target name="jars" depends="build" description="Build server jar file">
-		<mkdir dir="${module.dist.dir}" />
-		<jar destfile="${module.dist.dir}/${package.name}.jar">
-			<fileset dir="${module.dist.dir}">
+		<mkdir dir="${module.dist.plugin.dir}" />
+		<jar destfile="${module.base.dir}/${package.name}.jar">
+			<fileset dir="${module.dist.classes.dir}">
 				<include name="**/*.*" />
 			</fileset>
 		</jar>

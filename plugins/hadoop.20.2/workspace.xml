@@ -1,5 +1,6 @@
 <workspace name="Hadoop 20.2" version="0.1">
 	<library>
+	    <path>dipper-hadoop.20.2.jar</path>
 		<path>lib</path>
 	</library>
 </workspace>
